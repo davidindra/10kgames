@@ -10,7 +10,7 @@
     <style><?php require 'template.css'; ?></style>
     <script><?php require 'template.js'; ?></script>
 </head>
-<body>
+<body onload="startGame()">
 <br><br><br><br><br>
 <h2>
     You are JS-positive! :)
