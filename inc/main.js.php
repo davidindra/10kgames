@@ -1,2 +1,2 @@
 <?php
-require 'main.js.html';
+require 'main.js.tpl.php';

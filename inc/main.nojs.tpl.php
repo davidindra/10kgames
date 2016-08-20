@@ -12,5 +12,10 @@
 <h2 style="text-align: center;">
     You haven't JS! :(
 </h2>
+<?php
+foreach($jokes as $joke){
+    echo '<div style="text-align: center; margin-bottom: 20px;">' . $joke . '</div>';
+}
+?>
 </body>
 </html>
