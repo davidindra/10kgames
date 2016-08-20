@@ -6,10 +6,12 @@
     <script>
         window.location = "/?env=reset"; // if user turn on JS at some time after first load
     </script>
+
+    <style><?php require 'template.css'; ?></style>
 </head>
 <body>
 <br><br><br><br><br>
-<h2 style="text-align: center;">
+<h2>
     You haven't JS! :(
 </h2>
 <?php
