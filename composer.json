@@ -1,0 +1,20 @@
+{
+  "name": "davidindra/10kgames",
+  "description": "multiplayer online game portal fitting in 10k of code",
+  "minimum-stability": "stable",
+  "license": "OSS",
+  "authors": [
+    {
+      "name": "David Indra",
+      "email": "mail@davidindra.cz"
+    },
+    {
+      "name": "Jakub Szymsza",
+      "email": "jakub@szymsza.cz"
+    }
+  ],
+  "require-dev": {
+    "dg/ftp-deployment": "v2.5",
+    "vrana/adminer": "v4.2.5"
+  }
+}

@@ -1,2 +1,6 @@
-!.gitignore
+!/.gitignore
 .idea/
+/vendor/
+/composer*
+!/composer.json
+/deployment*
