@@ -1,21 +1,22 @@
 <?php
 session_start();
 
-if(isset($_GET['env'])){ // we know which version we want - second hit
+if(isset($_GET['env'])){ // second hit
     if($_GET['env'] == 'js'){
         $_SESSION['env'] = 'js';
-        require './inc/js.inc.php';
+    }elseif($_GET['env'] == 'reset'){
+        unset($_SESSION['env']);
     }else{
         $_SESSION['env'] = 'nojs';
-        require './inc/nojs.inc.php';
     }
-}elseif(isset($_SESSION['env'])){ // we already know which version we want - nth hit
+    header('Location: /');
+}elseif(isset($_SESSION['env'])){ // nth hit
     if($_SESSION['env'] == 'js'){
         require './inc/js.inc.php';
     }else{
         require './inc/nojs.inc.php';
     }
-}else{ // we are on mainpage, first hit
+}else{ // first hit
     require './inc/welcome.inc.php';
 }
 
