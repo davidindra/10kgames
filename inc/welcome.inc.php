@@ -6,14 +6,14 @@
     <script>
         window.location = "/?env=js";
     </script>
-    <meta http-equiv="refresh" content="1; url=/?env=nojs">
+    <noscript>
+        <meta http-equiv="refresh" content="0; url=/?env=nojs">
+    </noscript>
 </head>
 <body>
 <br><br><br><br><br>
-<center>
-    <h2>
-        Loading...
-    </h2>
-</center>
+<h2 style="text-align: center;">
+    Loading...
+</h2>
 </body>
 </html>
