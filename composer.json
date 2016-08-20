@@ -19,6 +19,6 @@
   },
   "require-dev": {
     "dg/ftp-deployment": "v2.5",
-    "vrana/adminer": "v4.2.5"
+    "vrana/adminer": "v4.2.3"
   }
 }

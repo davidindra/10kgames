@@ -12,12 +12,12 @@ if(isset($_GET['env'])){ // second hit
     header('Location: /');
 }elseif(isset($_SESSION['env'])){ // nth hit
     if($_SESSION['env'] == 'js'){
-        require './inc/js.inc.php';
+        require './inc/main.js.php';
     }else{
-        require './inc/nojs.inc.php';
+        require './inc/main.nojs.php';
     }
 }else{ // first hit
-    require './inc/welcome.inc.php';
+    require './inc/loading.html';
 }
 
 die();
