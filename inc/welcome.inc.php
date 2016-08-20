@@ -1,0 +1,1 @@
+hello, this is mainpage - we do not know if you have JS or not. specify it by sending request /?env=js or /?env=nojs
