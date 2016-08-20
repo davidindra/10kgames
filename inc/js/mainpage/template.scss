@@ -2,7 +2,16 @@ h2{
   text-align: center;
 }
 
-canvas {
-  border: 3px solid black;
+body {
   background-color: black;
+  color: white;
+  text-align: center;
+}
+
+canvas {
+  border: 3px dotted white;
+  background-color: black;
+  position: fixed;
+  top: calc((100vh - 400px) / 2);
+  left: calc((100vw - 800px) / 2);
 }

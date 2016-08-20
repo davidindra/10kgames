@@ -11,9 +11,5 @@
     <script><?php require 'template.js'; ?></script>
 </head>
 <body onload="startGame()">
-<br><br><br><br><br>
-<h2>
-    You are JS-positive! :)
-</h2>
 </body>
 </html>
