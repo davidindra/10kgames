@@ -4,3 +4,4 @@
 /composer*
 !/composer.json
 /deployment*
+/adminer
