@@ -13,6 +13,17 @@ document.addEventListener("DOMContentLoaded", function() {
     id("login").show();
 });
 
+var x = 0;
+setInterval(function() {
+    id("loading-header").innerHTML += ".";
+    x++;
+    if (x == 3) {
+        var substr = id("loading-header").innerHTML.trim().slice(0, -3);
+        id("loading-header").innerHTML = substr;
+        x = 0;
+    }
+}, 500);
+
 function load(gametype) {
     websocket.send(JSON.stringify({
         "event": "queue",
@@ -30,6 +41,18 @@ function submitName() {
     }));
 }
 
+function startGame(data) {
+    id ("game").show();
+    if (data.gamename == "blocks") {
+        id("loading").hide();
+        drawGame();
+        blocks.start();
+    }
+}
+
+window.onbeforeunload = function() {
+    websocket.send(JSON.stringify({'event':'disconnect'}));
+};
 
 var websocket = new WebSocket("ws://localhost:9000");
 websocket.onmessage = function(evt) {
@@ -41,14 +64,14 @@ websocket.onmessage = function(evt) {
         var e = data.event;
         switch (e) {
             case "changename": id("login").hide(); id("gameChoose").show(); break;
-            case "queued": console.log("You're "+data.nth+"th"); break;
-            case "gameready": console.log("Your game is ready!"); break;
+            case "queue": id("loading").show(); id("gameChoose").hide(); id("queue").innerHTML = data.nth; break;
+            case "gameready": startGame(data); break;
             case "newFruit": console.log("Generate new fruit, regenerate score"); break;
             case "directionChange": console.log("Change opponent's position and speed"); break;
         }
     } else if (data.state == "error") {
         alert("Server error: "+data.error)
-    } else {
+    } else if (data.state != "disconnected") {
         alert("Unknown server error.");
     }
 };

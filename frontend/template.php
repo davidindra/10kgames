@@ -135,10 +135,11 @@
     </table>
 </div>
 <div id="loading">
-    Loading
+    <h1 id="loading-header">Waiting for an opponent</h1>
+    <h4>You're <span id="queue"></span> in the queue.</h4>
+    <button onclick="startGame({gamename: 'blocks'})">Simulovat druhého hráče</button>
 </div>
 <div id="game">
-    <button onclick="canvas.start()" id="button">Start Game</button>
 </div>
 </body>
 </html>

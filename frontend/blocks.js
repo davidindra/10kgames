@@ -2,27 +2,27 @@ var players = [],
     fruit;
 
 function drawGame() {
-    canvas.draw();
+   blocks.draw();
     players["me"] = new Component(30, 30, "white", 50, 185, 0);
     players["you"] = new Component(30, 30, "gray", 720, 185, 0);
     fruit = new Component(10, 10, "red", 395, 195, false);
     updateGameArea();
-    canvas.context.font="18px Courier New";
-    canvas.context.fillStyle = "white";
-    canvas.context.fillText("You", 50, 170);
-    canvas.context.fillText("Opponent", 685, 170);
-    canvas.context.fillText("Catch this", 345, 180);
+   blocks.context.font="18px Courier New";
+   blocks.context.fillStyle = "white";
+   blocks.context.fillText("You", 50, 170);
+   blocks.context.fillText("Opponent", 685, 170);
+   blocks.context.fillText("Catch this", 345, 180);
 }
 
 function timeOut(text, after) {
     updateGameArea();
-    canvas.context.font="150px Courier New";
-    canvas.context.fillStyle = "white";
-    canvas.context.fillText(text, 350, 250);
+   blocks.context.font="150px Courier New";
+   blocks.context.fillStyle = "white";
+   blocks.context.fillText(text, 350, 250);
     setTimeout(after, 1000);
 }
 
-var canvas = {
+var blocks = {
     canvas: document.createElement("canvas"),
     keys: [],
     speed: 4,
@@ -30,13 +30,13 @@ var canvas = {
         this.canvas.width = 800;
         this.canvas.height = 400;
         this.context = this.canvas.getContext("2d");
-        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        id("game").innerHTML = "<h1>Blocks</h1>";
+        id("game").insertBefore(this.canvas, id("game").firstChild);
     },
     start: function() {
-        document.getElementById("button").style.display = "none";
         timeOut("3", function() {
             timeOut("2", function() {
-                timeOut("1", canvas.begin)
+                timeOut("1",blocks.begin)
             });
         });
     },
@@ -44,12 +44,11 @@ var canvas = {
         updateGameArea();
         this.interval = setInterval(updateGameArea, 15);
         window.addEventListener('keydown', function (e) {
-            canvas.keys = (canvas.keys || []);
-            canvas.keys[e.keyCode] = (e.type == "keydown");
+           blocks.keys[e.keyCode] = (e.type == "keydown");
             players["me"].directionChange();
         });
         window.addEventListener('keyup', function (e) {
-            canvas.keys[e.keyCode] = (e.type == "keydown");
+           blocks.keys[e.keyCode] = (e.type == "keydown");
             players["me"].directionChange();
         });
 
@@ -63,7 +62,7 @@ function Component(width, height, color, x, y, score) {
     if (score !== false) {
         this.scoreEl = document.createElement("div");
         this.scoreEl.className = color+"Score scoreDiv";
-        document.body.insertBefore(this.scoreEl, document.body.childNodes[0]);
+        id("game").insertBefore(this.scoreEl, id("game").firstChild);
     }
     this.color = color;
     this.width = width;
@@ -77,7 +76,7 @@ function Component(width, height, color, x, y, score) {
 
 Component.prototype = {
     update: function() {
-        var ctx = canvas.context;
+        var ctx =blocks.context;
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
         if (this.score !== false)
@@ -86,18 +85,18 @@ Component.prototype = {
 
     newPos: function(rand) {
         if (rand)
-            return this.setPos(Math.floor(Math.random() * (canvas.canvas.width - this.width)), Math.floor(Math.random() * (canvas.canvas.height - this.height)));
+            return this.setPos(Math.floor(Math.random() * (blocks.canvas.width - this.width)), Math.floor(Math.random() * (blocks.canvas.height - this.height)));
 
     	if (this.x < 0-this.width)
-        	this.x = canvas.canvas.width;
-        else if (this.x > canvas.canvas.width)
+        	this.x =blocks.canvas.width;
+        else if (this.x >blocks.canvas.width)
         	this.x = 0-this.width;
         else
         	this.x += this.speedX;
 
     	if (this.y < 0-this.height)
-        	this.y = canvas.canvas.height;
-        else if (this.y > canvas.canvas.height)
+        	this.y =blocks.canvas.height;
+        else if (this.y >blocks.canvas.height)
         	this.y = 0-this.height;
         else
         	this.y += this.speedY;
@@ -128,24 +127,24 @@ Component.prototype = {
     },
 
     directionChange: function() {
-        if (canvas.keys[37])
-            players["me"].speedX = -canvas.speed;
-        else if (canvas.keys[39])
-            players["me"].speedX = canvas.speed;
+        if (blocks.keys[37])
+            players["me"].speedX = -blocks.speed;
+        else if (blocks.keys[39])
+            players["me"].speedX =blocks.speed;
         else
            players["me"].speedX = 0;
 
-        if (canvas.keys[38])
-            players["me"].speedY = -canvas.speed;
-        else if (canvas.keys[40])
-            players["me"].speedY = canvas.speed;
+        if (blocks.keys[38])
+            players["me"].speedY = -blocks.speed;
+        else if (blocks.keys[40])
+            players["me"].speedY =blocks.speed;
         else
             players["me"].speedY = 0;
     }
 };
 
 function updateGameArea() {
-    canvas.clear();
+   blocks.clear();
 
     /*
     players["you"].setPos(x, y); <-- set from WebSockets request
@@ -154,17 +153,17 @@ function updateGameArea() {
     */
 
     // ↓ bot
-    if (fruit.x-canvas.speed > players["you"].x)
-        players["you"].speedX = canvas.speed;
-    else if (fruit.x+canvas.speed < players["you"].x)
-        players["you"].speedX = -canvas.speed;
+    if (fruit.x-blocks.speed > players["you"].x)
+        players["you"].speedX =blocks.speed;
+    else if (fruit.x+blocks.speed < players["you"].x)
+        players["you"].speedX = -blocks.speed;
     else
         players["you"].speedX = 0;
 
-    if (fruit.y-canvas.speed > players["you"].y)
-        players["you"].speedY = canvas.speed;
-    else if (fruit.y+canvas.speed < players["you"].y)
-        players["you"].speedY = -canvas.speed;
+    if (fruit.y-blocks.speed > players["you"].y)
+        players["you"].speedY =blocks.speed;
+    else if (fruit.y+blocks.speed < players["you"].y)
+        players["you"].speedY = -blocks.speed;
     else
         players["you"].speedY = 0;
     // ↑ bot
