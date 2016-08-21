@@ -1,12 +1,23 @@
-h2{
-  text-align: center;
-}
+/* JS & nonJS */
 
 body {
   background-color: black;
   color: white;
   text-align: center;
+  font-family: 'VT323', monospace;
+  font-size: 1.3em;
+  cursor: default;
 }
+
+a{
+  color: white;
+}
+
+a:hover{
+  color: #808080;
+}
+
+/* JS */
 
 canvas {
   border: 3px dotted white;
@@ -14,4 +25,39 @@ canvas {
   position: fixed;
   top: calc((100vh - 400px) / 2);
   left: calc((100vw - 800px) / 2);
+}
+
+/* nonJS */
+
+section#nojs{
+  width: 60%;
+  margin: 60px 20% 0;
+}
+
+section#nojs div#score{
+  text-align: center;
+}
+
+#score table{
+  display: inline-block;
+  margin: 8px 15px;
+  border-collapse: collapse;
+  vertical-align: top;
+}
+
+#score td, #score th{
+  border-top: 1px solid white;
+  padding: 2px 6px 3px;
+  text-align: left;
+}
+
+#score .gamename th{
+  font-size: 1.1em;
+  border: none;
+  text-align: center;
+}
+
+#score .labels th{
+  color: #808080;
+  border-color: #808080;
 }
