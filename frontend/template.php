@@ -6,7 +6,8 @@
 
     <?php if (isset($_GET['js'])) { ?>
         <script>
-            <?php require 'template.js'; ?>
+            <?php require 'common.js';
+            require 'blocks.js'; ?>
         </script>
     <?php }else{ ?>
         <script>
@@ -18,7 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
     <style><?php require 'template.css'; ?></style>
 </head>
-<body onload="drawGame()">
+<body>
 <noscript>
     <section id="nojs">
         <h1>10kGames</h1>
@@ -102,6 +103,42 @@
         </div>
     </section>
 </noscript>
-<button onclick="canvas.start()" id="button">Start Game</button>
+<div id="login">
+    <h1>10kGames</h1>
+    <h4>online multiplayer gaming portal</h4>
+    <span>Welcome on 10kGames! 10kGames is a new gaming portal created for 10kApart contest, where everybody can play a few minigames with others.</span>
+    <h4>Choose your nickname in the field bellow</h4>
+    <div style="text-align: center">
+        <input type="text" id="nickname" value=""><br>
+        <button id="letsPlay" onclick="submitName()">Let's play!</button>
+    </div>
+</div>
+<div id="gameChoose">
+    <h1>Select game</h1>
+    <table>
+        <tr>
+            <td onclick="load('blocks')">
+                <h4>Blocks</h4>
+            </td>
+            <td>
+                <h4>Some game</h4>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h4>Other game</h4>
+            </td>
+            <td>
+                <h4>Last game</h4>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="loading">
+    Loading
+</div>
+<div id="game">
+    <button onclick="canvas.start()" id="button">Start Game</button>
+</div>
 </body>
 </html>

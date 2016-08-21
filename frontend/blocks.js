@@ -1,26 +1,3 @@
-/*
-var websocket = new WebSocket("ws://localhost:9000");
-websocket.onmessage = function(evt) {
-    var data = JSON.parse(evt.data);
-    if (data.state == "ok") {
-        if (data.action == "newFruit") {
-            // generate new fruit and regenerate score
-        } else if (data.action == "directionChange") {
-            // change opponent position and speed
-        }
-    } else if (data.state == "error" || data.state == "unknown") { // delete if(), keep just else
-        alert("Server error.")
-    }
-};
-
-websocket.onclose = function() {
-  alert("Connection closed!");
-};
-
-websocket.onerror = function() {
-  alert("Connection error!");
-};
-*/
 var players = [],
     fruit;
 
