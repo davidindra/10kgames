@@ -1,11 +1,25 @@
 <?php
 require_once 'QueueMember.php';
+require_once 'GameManager.php';
 
 class Queue{
     /**
      * @var QueueMember[]
      */
     private $queue = [];
+
+    /**
+     * @var GameManager
+     */
+    private $gameManager;
+
+    /**
+     * @param GameManager $gameManager
+     */
+    public function setGameManager(GameManager $gameManager)
+    {
+        $this->gameManager = $gameManager;
+    }
 
     public function removeMember($sid){
         foreach($this->queue as $key => $queueMember){
@@ -17,14 +31,18 @@ class Queue{
 
     public function add(QueueMember $newQueueMember){
         $this->queue[] = $newQueueMember;
-        /*$nth = 0;
-        foreach($this->queue as $queueMember){
-            if($queueMember->getGame() == $newQueueMember->getGame()){
-                $nth++;
-            }
+
+        $nth = count($this->queue);
+        switch($nth){
+            case 1:
+                return '1st';
+            case 2:
+                return '2nd';
+            case 3:
+                return '3rd';
+            default:
+                return $nth . 'th';
         }
-        return $nth;*/
-        return count($this->queue);
     }
 
     public function findMember($sid){
@@ -50,7 +68,7 @@ class Queue{
                         'opponent' =>
                             [
                                 'username' => $playerTwo->getUsername(),
-                                'overallscore' => 574 // TODO score!
+                                'overallscore' => $playerTwo->getScore()
                             ],
                         'state' => 'ok'
                     ],
@@ -65,7 +83,7 @@ class Queue{
                         'opponent' =>
                             [
                                 'username' => $playerOne->getUsername(),
-                                'overallscore' => 323 // TODO score!
+                                'overallscore' => $playerOne->getScore()
                             ],
                         'state' => 'ok'
                     ],

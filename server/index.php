@@ -1,19 +1,26 @@
 <?php
-require_once 'WebSocketServer.php';
-
 echo 'Welcome in 10kGames WebSocket server!' . PHP_EOL;
 
-$clientManager = new ClientManager();
+require_once 'ClientManager.php'; // loads all classes
 
-$playerManager = new PlayerManager();
-$clientManager->setPlayerManager($playerManager);
+// ClientManager
+$clientManager = new ClientManager(); // ClientManager routes it all
 
-$queue = new Queue();
-$clientManager->setQueue($queue);
+// PlayerManager
+$playerManager = new PlayerManager(); // holds an array of all live players
+$clientManager->setPlayerManager($playerManager); // ClientManager needs access to a list of all players
 
+// Queue
+$queue = new Queue(); // queue of waiting players
+$clientManager->setQueue($queue); // ClientManager needs access to queue for adding new members into it
 
-$server = new WebSocketServer($clientManager);
+// GameManager
+$gameManager = new GameManager(); // GameManager manages all running games
+$queue->setGameManager($gameManager); // Queue creates games
 
-$clientManager->setWebSocketServer($server);
+// WebSocketServer
+$server = new WebSocketServer($clientManager); // WebSocketServer works with raw data coming from players
+$clientManager->setWebSocketServer($server); // ClientManager takes all the requests and routes it
+$gameManager->setWebSocketServer($server); // GameManager needs to send messages to players
 
-$server->run();
+$server->run(); // launch an infinite loop

@@ -1,10 +1,6 @@
 <?php
 
 class Player{
-    private $sid;
-    private $ip;
-    private $username;
-
     public function __construct($sid, $ip)
     {
         $this->sid = $sid;
@@ -12,24 +8,30 @@ class Player{
         $this->username = 'kilobyte' . mt_rand(100, 999);
     }
 
+    private $sid;
+
     /**
-     * @return mixed
+     * @return string
      */
     public function getSid()
     {
         return $this->sid;
     }
 
+    private $ip;
+
     /**
-     * @return mixed
+     * @return string
      */
     public function getIp()
     {
         return $this->ip;
     }
 
+    private $username;
+
     /**
-     * @return mixed
+     * @return string
      */
     public function getUsername()
     {
@@ -37,10 +39,28 @@ class Player{
     }
 
     /**
-     * @param mixed $username
+     * @param string $username
      */
     public function setUsername($username)
     {
         $this->username = $username;
+    }
+
+    private $score = 0;
+
+    /**
+     * @param int $score
+     */
+    public function addScore($score)
+    {
+        $this->score += $score;
+    }
+
+    /**
+     * @return int
+     */
+    public function getScore()
+    {
+        return $this->score;
     }
 }
