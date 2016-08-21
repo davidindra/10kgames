@@ -3,9 +3,9 @@ var players = [],
 
 function startGame() {
     canvas.start();
-    players["me"] = new Component(30, 30, "white", 10, 120, 0);
-    players["you"] = new Component(30, 30, "gray", 10, 120, 0);
-    fruit = new Component(10, 10, "red", 100, 200, false);
+    players["me"] = new Component(30, 30, "white", 50, 185, 0);
+    players["you"] = new Component(30, 30, "gray", 720, 185, 0);
+    fruit = new Component(10, 10, "red", 395, 195, false);
 }
 
 var canvas = {
@@ -16,6 +16,7 @@ var canvas = {
         this.canvas.width = 800;
         this.canvas.height = 400;
         this.context = this.canvas.getContext("2d");
+        this.context.font="18px Verdana"
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.interval = setInterval(updateGameArea, 25);
         window.addEventListener('keydown', function (e) {
@@ -110,20 +111,20 @@ function updateGameArea() {
     players["you"].update();
     */
 
-    if (fruit.x > players["you"].x)
+    if (fruit.x-canvas.speed > players["you"].x)
         players["you"].speedX = canvas.speed;
-    else if (fruit.x < players["you"].x)
+    else if (fruit.x+canvas.speed < players["you"].x)
         players["you"].speedX = -canvas.speed;
     else
         players["you"].speedX = 0;
 
-    if (fruit.y > players["you"].y)
+    if (fruit.y-canvas.speed > players["you"].y)
         players["you"].speedY = canvas.speed;
-    else if (fruit.y < players["you"].y)
+    else if (fruit.y+canvas.speed < players["you"].y)
         players["you"].speedY = -canvas.speed;
     else
-        players["you"].speedY = 0;    
-    
+        players["you"].speedY = 0;
+
     players["you"].newPos();
     players["you"].update();
 
