@@ -1,4 +1,5 @@
 <?php
+require_once 'ClientManager.php';
 
 /**
  * Class WebSocketServer establishes a WebSocket server and maintains connecting clients
@@ -54,41 +55,45 @@ class WebSocketServer
         $this->clients = array(0 => $socket); // add our listening socket to the list of clients
 
         while (true) { // process forever
-            $changed = array_values($this->clients); // manage multiple connections
-            socket_select($changed, $null, $null, 0, 10); // return socket resources into $changed[]
+            try {
+                $changed = array_values($this->clients); // manage multiple connections
+                socket_select($changed, $null, $null, 0, 10); // return socket resources into $changed[]
 
-            if (in_array($socket, $changed)) { // check for new socket connection
-                $rid = mt_rand(1, 9999999); // generate new random ID for the socket
-                $this->clients[$rid] = socket_accept($socket); //add socket to clients array
-                $header = socket_read($this->clients[$rid], 1024); //read data sent by the socket
-                $this->perform_handshaking($header, $this->clients[$rid]); //perform websocket handshake
-                socket_getpeername($this->clients[$rid], $ip);
-                $this->clientManager->clientNew($rid, $ip); // process the information about new client to the client manager
-                unset($changed[array_search($socket, $changed)]); //make room for new socket
-            }
+                if (in_array($socket, $changed)) { // check for new socket connection
+                    $rid = mt_rand(1, 9999999); // generate new random ID for the socket
+                    $this->clients[$rid] = socket_accept($socket); //add socket to clients array
+                    $header = socket_read($this->clients[$rid], 1024); //read data sent by the socket
+                    $this->perform_handshaking($header, $this->clients[$rid]); //perform websocket handshake
+                    socket_getpeername($this->clients[$rid], $ip);
+                    $this->clientManager->clientNew($rid, $ip); // process the information about new client to the client manager
+                    unset($changed[array_search($socket, $changed)]); //make room for new socket
+                }
 
-            foreach ($changed as $changed_socket) { //loop through all connected sockets
-                while (socket_recv($changed_socket, $buf, 1024, 0) >= 1) { //check for any incoming data
-                    if (($key = array_search($changed_socket, $this->clients)) !== false) { // get SID of this user
-                        $msg = $this->clientManager->message($key, json_decode($this->unmask($buf), true)); // process the message
-                        if ($msg == false) { // client requested end of the session
-                            $this->clientManager->clientDied($key); // manage client's disconnection
-                            unset($this->clients[$key]); // remove from array of clients
-                        } else{
-                            // nothing happens - connection continue
+                foreach ($changed as $changed_socket) { //loop through all connected sockets
+                    while (socket_recv($changed_socket, $buf, 1024, 0) >= 1) { //check for any incoming data
+                        if (($key = array_search($changed_socket, $this->clients)) !== false) { // get SID of this user
+                            $msg = $this->clientManager->message($key, json_decode($this->unmask($buf), true)); // process the message
+                            if ($msg == false) { // client requested end of the session
+                                $this->clientManager->clientDied($key); // manage client's disconnection
+                                unset($this->clients[$key]); // remove from array of clients
+                            } else {
+                                // nothing happens - connection continue
+                            }
+                        }
+                        break 2; //exit this loop & start over
+                    }
+
+                    $buf = @socket_read($changed_socket, 1024, PHP_NORMAL_READ); // read buffer
+                    if ($buf === false) { // client disconnected
+                        $found_socket = array_search($changed_socket, array_values($this->clients)); // find socket in clients array
+                        if (($key = array_search($found_socket, $this->clients)) !== false) { // find client's SID
+                            $this->clientManager->clientDied($key); // manage disconnection of client with this SID
+                            unset($this->clients[$key]); // remove client from client's array
                         }
                     }
-                    break 2; //exit this loop & start over
                 }
-
-                $buf = @socket_read($changed_socket, 1024, PHP_NORMAL_READ); // read buffer
-                if ($buf === false) { // client disconnected
-                    $found_socket = array_search($changed_socket, array_values($this->clients)); // find socket in clients array
-                    if (($key = array_search($found_socket, $this->clients)) !== false) { // find client's SID
-                        $this->clientManager->clientDied($key); // manage disconnection of client with this SID
-                        unset($this->clients[$key]); // remove client from client's array
-                    }
-                }
+            } catch (Exception $e) {
+                echo 'FATAL: ' . $e->getMessage() . ' (' . $e->getFile() . ':' . $e->getLine() . ')' . PHP_EOL;
             }
         }
 
@@ -103,11 +108,11 @@ class WebSocketServer
      */
     public function send($msg, $sid = null)
     {
-        if(empty($sid)) {
+        if (empty($sid)) {
             foreach (array_values($this->clients) as $changed_socket) {
                 @socket_write($changed_socket, $this->mask(json_encode($msg, strlen($msg))));
             }
-        }else{
+        } else {
             @socket_write($this->clients[$sid], $this->mask(json_encode($msg, strlen($msg))));
         }
         return true;
@@ -118,23 +123,22 @@ class WebSocketServer
      * @param string $text
      * @return string
      */
-    private function unmask($text) {
+    private function unmask($text)
+    {
         $length = ord($text[1]) & 127;
-        if($length == 126) {
+        if ($length == 126) {
             $masks = substr($text, 4, 4);
             $data = substr($text, 8);
-        }
-        elseif($length == 127) {
+        } elseif ($length == 127) {
             $masks = substr($text, 10, 4);
             $data = substr($text, 14);
-        }
-        else {
+        } else {
             $masks = substr($text, 2, 4);
             $data = substr($text, 6);
         }
         $text = "";
         for ($i = 0; $i < strlen($data); ++$i) {
-            $text .= $data[$i] ^ $masks[$i%4];
+            $text .= $data[$i] ^ $masks[$i % 4];
         }
         return $text;
     }
@@ -149,9 +153,9 @@ class WebSocketServer
         $b1 = 0x80 | (0x1 & 0x0f);
         $length = strlen($text);
 
-        if($length <= 125)
+        if ($length <= 125)
             $header = pack('CC', $b1, $length);
-        elseif($length > 125 && $length < 65536)
+        elseif ($length > 125 && $length < 65536)
             $header = pack('CCn', $b1, 126, $length);
         else
             $header = pack('CCNN', $b1, 127, $length);
@@ -168,11 +172,9 @@ class WebSocketServer
     {
         $headers = array();
         $lines = preg_split("/\r\n/", $receved_header);
-        foreach($lines as $line)
-        {
+        foreach ($lines as $line) {
             $line = chop($line);
-            if(preg_match('/\A(\S+): (.*)\z/', $line, $matches))
-            {
+            if (preg_match('/\A(\S+): (.*)\z/', $line, $matches)) {
                 $headers[$matches[1]] = $matches[2];
             }
         }
@@ -180,20 +182,21 @@ class WebSocketServer
         $secKey = $headers['Sec-WebSocket-Key'];
         $secAccept = base64_encode(pack('H*', sha1($secKey . '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')));
         //hand shaking header
-        $upgrade  = "HTTP/1.1 101 Web Socket Protocol Handshake\r\n" .
+        $upgrade = "HTTP/1.1 101 Web Socket Protocol Handshake\r\n" .
             "Upgrade: websocket\r\n" .
             "Connection: Upgrade\r\n" .
             "WebSocket-Origin: $this->host\r\n" .
-            "WebSocket-Location: ws://$this->host:$this->port/\r\n".
+            "WebSocket-Location: ws://$this->host:$this->port/\r\n" .
             "Sec-WebSocket-Accept:$secAccept\r\n\r\n";
-        socket_write($client_conn,$upgrade,strlen($upgrade));
+        socket_write($client_conn, $upgrade, strlen($upgrade));
     }
 }
 
 /**
  * Interface IClientManager defines a class, which receives and handles messages from clients
  */
-interface IClientManager{
+interface IClientManager
+{
     /**
      * Set WebSocketServer (needed usually for sending messages through it)
      * @param WebSocketServer $webSocketServer
