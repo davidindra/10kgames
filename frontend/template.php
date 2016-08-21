@@ -1,19 +1,22 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <title>10kGames</title>
 
-    <script>
-        if (window.location.search.indexOf("?js") === -1) {
-            window.location = "/?js"; // if user turn on JS at some time after first load
-        }
-    </script>
-
+    <?php if (isset($_GET['js'])) { ?>
+        <script>
+            <?php require 'template.js'; ?>
+        </script>
+    <?php }else{ ?>
+        <script>
+            if (window.location.search.indexOf("?js") === -1) {
+                window.location = "/?js"; // if user turn on JS at some time after first load
+            }
+        </script>
+    <?php } ?>
     <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
     <style><?php require 'template.css'; ?></style>
-    <?php if (isset($_GET['js'])) { ?>
-        <script><?php require 'template.js'; ?></script>
-    <?php } ?>
 </head>
 <body onload="startGame()">
 <noscript>
