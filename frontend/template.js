@@ -1,10 +1,10 @@
-var pls = [],
+var players = [],
     fruit;
 
 function startGame() {
     canvas.start();
-    pls["me"] = new Component(30, 30, "white", 10, 120, 0);
-    pls["you"] = new Component(30, 30, "gray", 10, 120, 0);
+    players["me"] = new Component(30, 30, "white", 10, 120, 0);
+    players["you"] = new Component(30, 30, "gray", 10, 120, 0);
     fruit = new Component(10, 10, "red", 100, 200, false);
 }
 
@@ -97,33 +97,33 @@ Component.prototype = {
 
 function updateGameArea() {
     canvas.clear();
-    pls["me"].speedX = 0;
-    pls["me"].speedY = 0;
-    if (canvas.keys[37]) {pls["me"].speedX = -canvas.speed; }
-    if (canvas.keys[39]) {pls["me"].speedX = canvas.speed; }
-    if (canvas.keys[38]) {pls["me"].speedY = -canvas.speed; }
-    if (canvas.keys[40]) {pls["me"].speedY = canvas.speed; }
+    players["me"].speedX = 0;
+    players["me"].speedY = 0;
+    if (canvas.keys[37]) {players["me"].speedX = -canvas.speed; }
+    if (canvas.keys[39]) {players["me"].speedX = canvas.speed; }
+    if (canvas.keys[38]) {players["me"].speedY = -canvas.speed; }
+    if (canvas.keys[40]) {players["me"].speedY = canvas.speed; }
 
     /*
-    pls["you"].setPos(x, y); <-- set from AJAX request
-    pls["you"].newPos();
-    pls["you"].update();
+    players["you"].setPos(x, y); <-- set from AJAX request
+    players["you"].newPos();
+    players["you"].update();
     */
-    pls["you"].speedY = canvas.speed;
-    pls["you"].speedX = canvas.speed;
-    pls["you"].newPos();
-    pls["you"].update();
+    players["you"].speedY = canvas.speed;
+    players["you"].speedX = canvas.speed;
+    players["you"].newPos();
+    players["you"].update();
 
-    pls["me"].newPos();
-    pls["me"].update();
+    players["me"].newPos();
+    players["me"].update();
 
-    if (pls["me"].crashWith(fruit))
-        pls["me"].score++;
+    if (players["me"].crashWith(fruit))
+        players["me"].score++;
 
-    if (pls["you"].crashWith(fruit))
-        pls["you"].score++;
+    if (players["you"].crashWith(fruit))
+        players["you"].score++;
 
-    while (pls["me"].crashWith(fruit) || pls["you"].crashWith(fruit))
+    while (players["me"].crashWith(fruit) || players["you"].crashWith(fruit))
         fruit.newPos(true);
     fruit.update();
 }
