@@ -1,10 +1,10 @@
 var players = [],
     fruit;
 
-function drawGame() {
-   blocks.draw();
-    players["me"] = new Component(30, 30, "white", 50, 185, 0);
-    players["you"] = new Component(30, 30, "gray", 720, 185, 0);
+function drawBlocks(myName, opName) {
+    blocks.draw();
+    players["me"] = new Component(30, 30, "white", 50, 185, 0, myName);
+    players["you"] = new Component(30, 30, "gray", 720, 185, 0, opName);
     fruit = new Component(10, 10, "red", 395, 195, false);
     updateGameArea();
 }
@@ -20,7 +20,7 @@ function timeOut(text, after) {
     blocks.context.fillText("You", 50, 170);
     blocks.context.fillText("Opponent", 685, 170);
     blocks.context.fillText("Catch this", 345, 180);
-    
+
     setTimeout(after, 1000);
 }
 
@@ -60,12 +60,20 @@ var blocks = {
     }
 };
 
-function Component(width, height, color, x, y, score) {
+function Component(width, height, color, x, y, score, name) {
     if (score !== false) {
         this.scoreEl = document.createElement("div");
         this.scoreEl.className = color+"Score scoreDiv";
         id("game").insertBefore(this.scoreEl, id("game").firstChild);
     }
+
+    if (name) {
+        var div = document.createElement("div");
+        div.className = color+"Name nameDiv";
+        div.innerHTML = "<b>"+name+"</b>";
+        id("game").insertBefore(div, id("game").firstChild);
+    }
+
     this.color = color;
     this.width = width;
     this.height = height;

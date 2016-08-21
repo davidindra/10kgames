@@ -13,7 +13,8 @@ document.addEventListener("DOMContentLoaded", function() {
     id("login").show();
 });
 
-var x = 0;
+var x = 0,
+    nickname;
 setInterval(function() {
     id("loading-header").innerHTML += ".";
     x++;
@@ -35,6 +36,7 @@ function submitName() {
     var name = id("nickname").value.trim();
     if (name == "")
         return id("nickname").value = "Nickname";
+    nickname = name;
     websocket.send(JSON.stringify({
         "event": "changename",
         "newName": name
@@ -45,7 +47,7 @@ function startGame(data) {
     id ("game").show();
     if (data.gamename == "blocks") {
         id("loading").hide();
-        drawGame();
+        drawBlocks(nickname, data.opponent.username);
         blocks.start();
     }
 }

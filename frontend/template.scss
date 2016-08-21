@@ -27,18 +27,37 @@ canvas {
   left: calc((100vw - 800px) / 2);
 }
 
-.scoreDiv {
+.nameDiv, .scoreDiv {
   position: fixed;
+  width: calc((100vw - 800px) / 2);
+  text-align: center;
+}
+
+.scoreDiv {
   font-size: 4em;
   top: calc(50% - .5em);
 
   &.grayScore { // opponent score
     color: gray;
-    right: 1em;
+    right: 0;
   }
 
   &.whiteScore { // player score
-    left: 1em;
+    left: 0;
+  }
+}
+
+.nameDiv {
+  font-size: 2em;
+  top: calc((100vh - 400px) / 2);
+
+  &.grayName {
+    color: gray;
+    right: 0;
+  }
+
+  &.whiteName {
+    left: 0;
   }
 }
 

@@ -137,7 +137,7 @@
 <div id="loading">
     <h1 id="loading-header">Waiting for an opponent</h1>
     <h4>You're <span id="queue"></span> in the queue.</h4>
-    <button onclick="startGame({gamename: 'blocks'})">Simulovat druhého hráče</button>
+    <button onclick="startGame({gamename: 'blocks', opponent: {username: 'GameBot'}})">Simulovat druhého hráče</button>
 </div>
 <div id="game">
 </div>
