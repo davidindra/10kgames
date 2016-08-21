@@ -11,7 +11,7 @@ class PlayerManager{
         $this->players[] = $player;
     }
 
-    public function getPlayer($sid){
+    public function findPlayer($sid){
         foreach($this->players as $player){
             if($player->getSid() == $sid){
                 return $player;

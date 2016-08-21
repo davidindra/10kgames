@@ -5,7 +5,7 @@ class Queue{
     /**
      * @var QueueMember[]
      */
-    private $queue;
+    private $queue = [];
 
     public function removeMember($sid){
         foreach($this->queue as $key => $queueMember){
@@ -17,13 +17,23 @@ class Queue{
 
     public function add(QueueMember $newQueueMember){
         $this->queue[] = $newQueueMember;
-        $nth = 0;
+        /*$nth = 0;
         foreach($this->queue as $queueMember){
             if($queueMember->getGame() == $newQueueMember->getGame()){
                 $nth++;
             }
         }
-        return $nth;
+        return $nth;*/
+        return count($this->queue);
+    }
+
+    public function findMember($sid){
+        foreach($this->queue as $key => $queueMember){
+            if($queueMember->getPlayer()->getSid() == $sid){
+                return $this->queue[$key];
+            }
+        }
+        return false;
     }
 
     public function match(WebSocketServer $webSocketServer){ // TODO: nebudeme potrebovat - zpravy se premisti do Game
@@ -35,6 +45,7 @@ class Queue{
                 $webSocketServer->send(
                     [
                         'event' => 'gameready',
+                        'gamename' => $queueMember->getGame(),
                         'side' => 'left',
                         'opponent' =>
                             [
@@ -49,6 +60,7 @@ class Queue{
                 $webSocketServer->send(
                     [
                         'event' => 'gameready',
+                        'gamename' => $queueMember->getGame(),
                         'side' => 'right',
                         'opponent' =>
                             [

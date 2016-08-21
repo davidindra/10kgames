@@ -68,22 +68,39 @@ class ClientManager implements IClientManager{
     {
         echo 'MSG: ' . $sid . ': ' . json_encode($msg) . PHP_EOL;
 
+        $response = ['event' => @$msg['event']];
         switch(@strtolower(@$msg['event'])){
             case 'disconnect':
                 return false;
             case 'changename':
-                $this->playerManager->getPlayer($sid)->setUsername($msg['newname']);
-                $this->webSocketServer->send(['state' => 'ok'], $sid);
+                $this->playerManager->findPlayer($sid)->setUsername(@$msg['newname']);
+                $response['newname'] = @$msg['newname'];
+                $response['state'] = 'ok';
+                $this->webSocketServer->send($response, $sid);
                 break;
             case 'queue':
-                $queueMember = new QueueMember($this->playerManager->getPlayer($sid), $msg['gametype']);
-                $nth = $this->queue->add($queueMember);
-                $this->webSocketServer->send(['nth' => $nth, 'state' => 'ok'], $sid);
+                if($this->queue->findMember($sid)){
+                    $response['error'] = 'already in a queue';
+                    $response['state'] = 'error';
+                    $this->webSocketServer->send($response, $sid);
+                    break;
+                }
 
-                $this->queue->match($this->webSocketServer);
+                $queueMember = new QueueMember($this->playerManager->findPlayer($sid), $msg['gametype']);
+                $response['nth'] = $this->queue->add($queueMember);
+                $response['state'] = 'ok';
+                $this->webSocketServer->send($response, $sid);
+
+                $this->queue->match($this->webSocketServer); // TODO: socketserver won't be neccessary
+                break;
+            case 'game':
+                $response['state'] = 'TODO';
+                $this->webSocketServer->send($response, $sid);
+
                 break;
             default:
-                $this->webSocketServer->send(['state' => 'unknown'], $sid);
+                $response['state'] = 'unknown';
+                $this->webSocketServer->send($response, $sid);
         }
 
         return true;

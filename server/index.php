@@ -13,6 +13,7 @@ $clientManager->setQueue($queue);
 
 
 $server = new WebSocketServer($clientManager);
+
 $clientManager->setWebSocketServer($server);
 
 $server->run();
