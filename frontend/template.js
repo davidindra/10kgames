@@ -109,8 +109,21 @@ function updateGameArea() {
     players["you"].newPos();
     players["you"].update();
     */
-    players["you"].speedY = canvas.speed;
-    players["you"].speedX = canvas.speed;
+
+    if (fruit.x > players["you"].x)
+        players["you"].speedX = canvas.speed;
+    else if (fruit.x < players["you"].x)
+        players["you"].speedX = -canvas.speed;
+    else
+        players["you"].speedX = 0;
+
+    if (fruit.y > players["you"].y)
+        players["you"].speedY = canvas.speed;
+    else if (fruit.y < players["you"].y)
+        players["you"].speedY = -canvas.speed;
+    else
+        players["you"].speedY = 0;    
+    
     players["you"].newPos();
     players["you"].update();
 
