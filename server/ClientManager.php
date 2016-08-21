@@ -19,7 +19,7 @@ class ClientManager implements IClientManager{
 
     public function clientDied($sid)
     {
-        $this->webSocketServer->send(['state' => 'disconnect'], $sid);
+        $this->webSocketServer->send(['state' => 'disconnected'], $sid);
         echo 'DIE: ' . $sid . PHP_EOL;
     }
 
