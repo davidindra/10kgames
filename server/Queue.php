@@ -35,6 +35,7 @@ class Queue{
                 $webSocketServer->send(
                     [
                         'event' => 'gameready',
+                        'side' => 'left',
                         'opponent' =>
                             [
                                 'username' => $playerTwo->getUsername(),
@@ -48,6 +49,7 @@ class Queue{
                 $webSocketServer->send(
                     [
                         'event' => 'gameready',
+                        'side' => 'right',
                         'opponent' =>
                             [
                                 'username' => $playerOne->getUsername(),
