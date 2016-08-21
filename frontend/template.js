@@ -1,3 +1,13 @@
+/*
+var websocket = new WebSocket("ws://localhost:9000");
+websocket.onmessage = function(evt) {
+    console.log(evt);
+};
+
+websocket.onopen = function() {
+  websocket.send(JSON.stringify({state: "helloworld"}));
+};*/
+
 var players = [],
     fruit;
 
@@ -11,20 +21,22 @@ function startGame() {
 var canvas = {
     canvas: document.createElement("canvas"),
     keys: [],
-    speed: 5,
+    speed: 4,
     start: function() {
         this.canvas.width = 800;
         this.canvas.height = 400;
         this.context = this.canvas.getContext("2d");
-        this.context.font="18px Verdana"
+        this.context.font="18px Verdana";
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-        this.interval = setInterval(updateGameArea, 25);
+        this.interval = setInterval(updateGameArea, 15);
         window.addEventListener('keydown', function (e) {
             canvas.keys = (canvas.keys || []);
             canvas.keys[e.keyCode] = (e.type == "keydown");
+            players["me"].directionChange();
         });
         window.addEventListener('keyup', function (e) {
             canvas.keys[e.keyCode] = (e.type == "keydown");
+            players["me"].directionChange();
         });
     },
     clear: function(){
@@ -33,6 +45,11 @@ var canvas = {
 };
 
 function Component(width, height, color, x, y, score) {
+    if (score !== false) {
+        this.scoreEl = document.createElement("div");
+        this.scoreEl.className = color+"Score scoreDiv";
+        document.body.insertBefore(this.scoreEl, document.body.childNodes[0]);
+    }
     this.color = color;
     this.width = width;
     this.height = height;
@@ -49,7 +66,7 @@ Component.prototype = {
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
         if (this.score !== false)
-            ctx.fillText("Score: "+this.score, this.x, 20);
+            this.scoreEl.innerText = this.score;
     },
 
     newPos: function(rand) {
@@ -93,24 +110,35 @@ Component.prototype = {
     setPos: function(x, y) {
         this.x = x;
         this.y = y;
+    },
+
+    directionChange: function() {
+        if (canvas.keys[37])
+            players["me"].speedX = -canvas.speed;
+        else if (canvas.keys[39])
+            players["me"].speedX = canvas.speed;
+        else
+           players["me"].speedX = 0;
+
+        if (canvas.keys[38])
+            players["me"].speedY = -canvas.speed;
+        else if (canvas.keys[40])
+            players["me"].speedY = canvas.speed;
+        else
+            players["me"].speedY = 0;
     }
 };
 
 function updateGameArea() {
     canvas.clear();
-    players["me"].speedX = 0;
-    players["me"].speedY = 0;
-    if (canvas.keys[37]) {players["me"].speedX = -canvas.speed; }
-    if (canvas.keys[39]) {players["me"].speedX = canvas.speed; }
-    if (canvas.keys[38]) {players["me"].speedY = -canvas.speed; }
-    if (canvas.keys[40]) {players["me"].speedY = canvas.speed; }
 
     /*
-    players["you"].setPos(x, y); <-- set from AJAX request
-    players["you"].newPos();
-    players["you"].update();
+    players["you"].setPos(x, y); <-- set from WebSockets request
+    players["you"].speedX = 0; <-- set from WebSockets request
+    players["you"].speedY = 0; <-- set from WebSockets request
     */
 
+    // ↓ bot
     if (fruit.x-canvas.speed > players["you"].x)
         players["you"].speedX = canvas.speed;
     else if (fruit.x+canvas.speed < players["you"].x)
@@ -124,6 +152,7 @@ function updateGameArea() {
         players["you"].speedY = -canvas.speed;
     else
         players["you"].speedY = 0;
+    // ↑ bot
 
     players["you"].newPos();
     players["you"].update();
@@ -132,10 +161,12 @@ function updateGameArea() {
     players["me"].update();
 
     if (players["me"].crashWith(fruit))
-        players["me"].score++;
+        players["me"].score++; // <-- send WebSockets request
 
+    // ↓ bot
     if (players["you"].crashWith(fruit))
         players["you"].score++;
+    // ↑ bot
 
     while (players["me"].crashWith(fruit) || players["you"].crashWith(fruit))
         fruit.newPos(true);

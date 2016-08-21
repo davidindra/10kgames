@@ -1,4 +1,4 @@
-/* JS & nonJS */
+// JS & nonJS
 
 body {
   background-color: black;
@@ -17,7 +17,7 @@ a:hover{
   color: #808080;
 }
 
-/* JS */
+// JS
 
 canvas {
   border: 3px dotted white;
@@ -27,7 +27,22 @@ canvas {
   left: calc((100vw - 800px) / 2);
 }
 
-/* nonJS */
+.scoreDiv {
+  position: fixed;
+  font-size: 4em;
+  top: calc(50% - .5em);
+
+  &.grayScore { // opponent score
+    color: gray;
+    right: 1em;
+  }
+
+  &.whiteScore { // player score
+    left: 1em;
+  }
+}
+
+// nonJS
 
 section#nojs{
   width: 60%;
