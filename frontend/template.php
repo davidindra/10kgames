@@ -18,7 +18,7 @@
     <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
     <style><?php require 'template.css'; ?></style>
 </head>
-<body onload="startGame()">
+<body onload="drawGame()">
 <noscript>
     <section id="nojs">
         <h1>10kGames</h1>
@@ -102,5 +102,6 @@
         </div>
     </section>
 </noscript>
+<button onclick="canvas.start()" id="button">Start Game</button>
 </body>
 </html>

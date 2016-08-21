@@ -1,33 +1,70 @@
 /*
 var websocket = new WebSocket("ws://localhost:9000");
 websocket.onmessage = function(evt) {
-    console.log(evt);
+    var data = JSON.parse(evt.data);
+    if (data.state == "ok") {
+        if (data.action == "newFruit") {
+            // generate new fruit and regenerate score
+        } else if (data.action == "directionChange") {
+            // change opponent position and speed
+        }
+    } else if (data.state == "error" || data.state == "unknown") { // delete if(), keep just else
+        alert("Server error.")
+    }
 };
 
-websocket.onopen = function() {
-  websocket.send(JSON.stringify({state: "helloworld"}));
-};*/
+websocket.onclose = function() {
+  alert("Connection closed!");
+};
 
+websocket.onerror = function() {
+  alert("Connection error!");
+};
+*/
 var players = [],
     fruit;
 
-function startGame() {
-    canvas.start();
+function drawGame() {
+    canvas.draw();
     players["me"] = new Component(30, 30, "white", 50, 185, 0);
     players["you"] = new Component(30, 30, "gray", 720, 185, 0);
     fruit = new Component(10, 10, "red", 395, 195, false);
+    updateGameArea();
+    canvas.context.font="18px Courier New";
+    canvas.context.fillStyle = "white";
+    canvas.context.fillText("You", 50, 170);
+    canvas.context.fillText("Opponent", 685, 170);
+    canvas.context.fillText("Catch this", 345, 180);
+}
+
+function timeOut(text, after) {
+    updateGameArea();
+    canvas.context.font="150px Courier New";
+    canvas.context.fillStyle = "white";
+    canvas.context.fillText(text, 350, 250);
+    setTimeout(after, 1000);
 }
 
 var canvas = {
     canvas: document.createElement("canvas"),
     keys: [],
     speed: 4,
-    start: function() {
+    draw: function() {
         this.canvas.width = 800;
         this.canvas.height = 400;
         this.context = this.canvas.getContext("2d");
-        this.context.font="18px Verdana";
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+    },
+    start: function() {
+        document.getElementById("button").style.display = "none";
+        timeOut("3", function() {
+            timeOut("2", function() {
+                timeOut("1", canvas.begin)
+            });
+        });
+    },
+    begin: function() {
+        updateGameArea();
         this.interval = setInterval(updateGameArea, 15);
         window.addEventListener('keydown', function (e) {
             canvas.keys = (canvas.keys || []);
@@ -38,6 +75,7 @@ var canvas = {
             canvas.keys[e.keyCode] = (e.type == "keydown");
             players["me"].directionChange();
         });
+
     },
     clear: function(){
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
