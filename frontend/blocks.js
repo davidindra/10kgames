@@ -7,18 +7,20 @@ function drawGame() {
     players["you"] = new Component(30, 30, "gray", 720, 185, 0);
     fruit = new Component(10, 10, "red", 395, 195, false);
     updateGameArea();
-   blocks.context.font="18px Courier New";
-   blocks.context.fillStyle = "white";
-   blocks.context.fillText("You", 50, 170);
-   blocks.context.fillText("Opponent", 685, 170);
-   blocks.context.fillText("Catch this", 345, 180);
 }
 
 function timeOut(text, after) {
     updateGameArea();
-   blocks.context.font="150px Courier New";
-   blocks.context.fillStyle = "white";
-   blocks.context.fillText(text, 350, 250);
+    blocks.context.font="150px Courier New";
+    blocks.context.fillStyle = "white";
+    blocks.context.fillText(text, 350, 125);
+
+    blocks.context.font="18px Courier New";
+    blocks.context.fillStyle = "white";
+    blocks.context.fillText("You", 50, 170);
+    blocks.context.fillText("Opponent", 685, 170);
+    blocks.context.fillText("Catch this", 345, 180);
+    
     setTimeout(after, 1000);
 }
 
