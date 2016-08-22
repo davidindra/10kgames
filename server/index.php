@@ -20,8 +20,8 @@ $queue->setGameManager($gameManager); // Queue creates games
 
 // WebSocketServer
 $server = new WebSocketServer($clientManager); // WebSocketServer works with raw data coming from players
-$clientManager->setWebSocketServer($server); // ClientManager takes all the requests and routes it
-$gameManager->setWebSocketServer($server); // GameManager needs to send messages to players
+//$clientManager->setWebSocketServer($server); // ClientManager takes all the requests and routes it
+//$gameManager->setWebSocketServer($server); // GameManager needs to send messages to players
 
 class Res{ /** @var WebSocketServer */
       public static $wss;

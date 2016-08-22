@@ -57,19 +57,6 @@ class Game{
         return $this->playerTwo;
     }
 
-    /**
-     * @var WebSocketServer
-     */
-    private $webSocketServer;
-
-    /**
-     * @param WebSocketServer $webSocketServer
-     */
-    public function setWebSocketServer(WebSocketServer $webSocketServer)
-    {
-        $this->webSocketServer = $webSocketServer;
-    }
-
     public function startGame(){
         // todo
     }

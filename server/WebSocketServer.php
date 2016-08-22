@@ -198,13 +198,6 @@ class WebSocketServer
 interface IClientManager
 {
     /**
-     * Set WebSocketServer (needed usually for sending messages through it)
-     * @param WebSocketServer $webSocketServer
-     * @return void
-     */
-    public function setWebSocketServer(WebSocketServer $webSocketServer);
-
-    /**
      * New client is connected
      * @param int $sid session ID
      * @param string $ip client's IP address

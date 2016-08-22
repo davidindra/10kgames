@@ -5,19 +5,6 @@ require_once 'Queue.php';
 
 class ClientManager implements IClientManager{
     /**
-     * @var WebSocketServer
-     */
-    private $webSocketServer;
-
-    /**
-     * @param WebSocketServer $webSocketServer
-     */
-    public function setWebSocketServer(WebSocketServer $webSocketServer)
-    {
-        $this->webSocketServer = $webSocketServer;
-    }
-
-    /**
      * @var PlayerManager
      */
     private $playerManager;
@@ -48,14 +35,14 @@ class ClientManager implements IClientManager{
         $player = new Player($sid, $ip);
         $this->playerManager->addPlayer($player);
 
-        $this->webSocketServer->send(['username' => $player->getUsername(), 'state' => 'connected'], $sid);
+        Res::wss()->send(['username' => $player->getUsername(), 'state' => 'connected'], $sid);
 
         echo 'NEW: ' . $ip . ' (' . $sid . ')' . PHP_EOL;
     }
 
     public function clientDied($sid)
     {
-        $this->webSocketServer->send(['state' => 'disconnected'], $sid);
+        Res::wss()->send(['state' => 'disconnected'], $sid);
 
         $this->queue->removeMember($sid);
         $this->playerManager->removePlayer($sid);
@@ -76,31 +63,31 @@ class ClientManager implements IClientManager{
                 $this->playerManager->findPlayer($sid)->setUsername(@$msg['newname']);
                 $response['newname'] = @$msg['newname'];
                 $response['state'] = 'ok';
-                $this->webSocketServer->send($response, $sid);
+                Res::wss()->send($response, $sid);
                 break;
             case 'queue': // TODO: validate game names!
                 if($this->queue->findMember($sid)){
                     $response['error'] = 'already in a queue';
                     $response['state'] = 'error';
-                    $this->webSocketServer->send($response, $sid);
+                    Res::wss()->send($response, $sid);
                     break;
                 }
 
                 $queueMember = new QueueMember($this->playerManager->findPlayer($sid), $msg['gametype']);
                 $response['nth'] = $this->queue->add($queueMember);
                 $response['state'] = 'ok';
-                $this->webSocketServer->send($response, $sid);
+                Res::wss()->send($response, $sid);
 
-                $this->queue->match($this->webSocketServer); // TODO: socketserver won't be neccessary
+                $this->queue->match();
                 break;
             case 'game':
                 $response['state'] = 'TODO';
-                $this->webSocketServer->send($response, $sid);
+                Res::wss()->send($response, $sid);
 
                 break;
             default:
                 $response['state'] = 'unknown';
-                $this->webSocketServer->send($response, $sid);
+                Res::wss()->send($response, $sid);
         }
 
         return true;

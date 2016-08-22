@@ -54,7 +54,7 @@ class Queue{
         return false;
     }
 
-    public function match(WebSocketServer $webSocketServer){ // TODO: nebudeme potrebovat - zpravy se premisti do Game
+    public function match(){
         $sortedMembers = array();
         foreach ($this->queue as $queueMember) {
             if(isset($sortedMembers[$queueMember->getGame()])){
@@ -66,7 +66,7 @@ class Queue{
 
                 $playerOne = $sortedMembers[$queueMember->getGame()]->getPlayer();
                 $playerTwo = $queueMember->getPlayer();
-                $webSocketServer->send(
+                Res::wss()->send(
                     [
                         'event' => 'gameready',
                         'gamename' => $queueMember->getGame(),
@@ -81,7 +81,7 @@ class Queue{
                     $playerOne->getSid()
                 );
 
-                $webSocketServer->send(
+                Res::wss()->send(
                     [
                         'event' => 'gameready',
                         'gamename' => $queueMember->getGame(),

@@ -1,6 +1,5 @@
 <?php
 require_once 'Game.php';
-require_once 'WebSocketServer.php';
 
 class GameManager{
     /**
@@ -8,21 +7,7 @@ class GameManager{
      */
     private $games = [];
 
-    /**
-     * @var WebSocketServer
-     */
-    private $webSocketServer;
-
-    /**
-     * @param WebSocketServer $webSocketServer
-     */
-    public function setWebSocketServer(WebSocketServer $webSocketServer)
-    {
-        $this->webSocketServer = $webSocketServer;
-    }
-
     public function startGame(Game $game){
-        $game->setWebSocketServer($this->webSocketServer);
         $this->games[] = $game;
         $game->startGame();
     }
