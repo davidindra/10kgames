@@ -72,16 +72,8 @@ class WebSocketServer
                 foreach ($changed as $changed_socket) { //loop through all connected sockets
                     while (socket_recv($changed_socket, $buf, 1024, 0) >= 1) { //check for any incoming data
                         if (($key = array_search($changed_socket, $this->clients)) !== false) { // get SID of this user
-                            $unmasked = $this->unmask($buf);
-
-                            if (preg_match_all("/({.*})/", $unmasked, $array)){
-                                $unmasked = $array[1][0];
-                            }else{
-                                $unmasked = '';
-                            }
-
-                            echo 'DBG: ' . $unmasked . PHP_EOL;
-                            $msg = $this->clientManager->message($key, json_decode($unmasked, true)); // process the message
+                            echo 'DBG: ' . $this->fixJson($this->unmask($buf)) . PHP_EOL;
+                            $msg = $this->clientManager->message($key, json_decode($this->fixJson($this->unmask($buf)), true)); // process the message
                             if ($msg == false) { // client requested end of the session
                                 $this->clientManager->clientDied($key); // manage client's disconnection
                                 unset($this->clients[$key]); // remove from array of clients
@@ -169,6 +161,33 @@ class WebSocketServer
         else
             $header = pack('CCNN', $b1, 127, $length);
         return $header . $text;
+    }
+
+    /**
+     * Fix some incorrect JSON string
+     * @param string $json
+     * @return string
+     */
+    private function fixJson($json){
+        $result = '';
+        $parenthesis = 0;
+        $firstrun = true;
+        for($i = 0; $i < strlen($json); $i++){
+            if($json[$i] == '{'){
+                $parenthesis++;
+                $firstrun = false;
+            }elseif($json[$i] == '}'){
+                $parenthesis--;
+                $firstrun = false;
+            }
+
+            $result .= $json[$i];
+
+            if($parenthesis == 0 && !$firstrun){
+                break;
+            }
+        }
+        return $result;
     }
 
     /**
