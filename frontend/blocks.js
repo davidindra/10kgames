@@ -254,6 +254,16 @@ function updateGameArea() {
         }
     }
 
+    if (players["me"].crashWith(fruit) && !blocks.sp) {
+        websocket.send(JSON.stringify({
+            event:"game",
+            data: {
+                type: "scored",
+                fruitX: fruit.x,
+                fruitY: fruit.y
+            }}));
+    }
+
     if (players["me"].crashWith(fruit)) {
         players["me"].score++;
         while (players["me"].crashWith(fruit) || players["you"].crashWith(fruit))
@@ -264,16 +274,6 @@ function updateGameArea() {
                 websocket.send(JSON.stringify({event: "game", data: {type: "gameOver"}}));
             blocks.gameOver(true);
         }
-    }
-
-    if (players["me"].crashWith(fruit) && !blocks.sp) {
-        websocket.send(JSON.stringify({
-            event:"game",
-            data: {
-                type: "scored",
-                fruitX: fruit.x,
-                fruitY: fruit.y
-            }}));
     }
 
     fruit.update();
