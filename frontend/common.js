@@ -70,6 +70,7 @@ websocket.onmessage = function(evt) {
             case "gameready": startGame(data); break;
             case "newFruit": console.log("Generate new fruit, regenerate score"); break;
             case "directionChange": console.log("Change opponent's position and speed"); break;
+            case "game": (data.opponentdata) ? window[data.gamename].gameEvent(data.opponentdata) : false; break;
         }
     } else if (data.state == "error") {
         alert("Server error: "+data.error)

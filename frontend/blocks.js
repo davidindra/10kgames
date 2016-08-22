@@ -36,7 +36,12 @@ function timeOut(text, after) {
 
 var blocks = {
     canvas: document.createElement("canvas"),
-    keys: [],
+    keys: {
+        37: false,
+        38: false,
+        39: false,
+        40: false
+    },
     speed: 4,
     mySide: null,
     sp: false,
@@ -58,17 +63,34 @@ var blocks = {
         updateGameArea();
         this.interval = setInterval(updateGameArea, 15);
         window.addEventListener('keydown', function (e) {
-           blocks.keys[e.keyCode] = (e.type == "keydown");
-            players["me"].directionChange();
+            if (e.keyCode in blocks.keys && blocks.keys[e.keyCode] !== true) {
+                blocks.keys[e.keyCode] = true;
+                players["me"].directionChange();
+            }
         });
         window.addEventListener('keyup', function (e) {
-           blocks.keys[e.keyCode] = (e.type == "keydown");
-            players["me"].directionChange();
+            if (e.keyCode in blocks.keys) {
+                blocks.keys[e.keyCode] = false;
+                players["me"].directionChange();
+            }
         });
 
     },
     clear: function(){
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    },
+    gameEvent: function(data) {
+        console.log(data);
+        if (data.type == "scored") {
+            players["you"].score++;
+            fruit.setPos(data.fruitX, data.fruitY);
+        }
+        else if (data.type == "directionChange") {
+            players["you"].x = data.x;
+            players["you"].y = data.y;
+            players["you"].speedX = data.speedX;
+            players["you"].speedY = data.speedY;
+        }
     }
 };
 
@@ -168,6 +190,17 @@ Component.prototype = {
             players["me"].speedY =blocks.speed;
         else
             players["me"].speedY = 0;
+
+        var me = players["me"];
+        websocket.send(JSON.stringify({
+            event:"game",
+            data: {
+                type: "directionChange",
+                speedX: me.speedX,
+                speedY: me.speedY,
+                x: me.x,
+                y: me.y
+            }}));
     }
 };
 
@@ -180,21 +213,21 @@ function updateGameArea() {
     players["you"].speedY = 0; <-- set from WebSockets request
     */
 
-    // ↓ bot
-    if (fruit.x-blocks.speed > players["you"].x)
-        players["you"].speedX =blocks.speed;
-    else if (fruit.x+blocks.speed < players["you"].x)
-        players["you"].speedX = -blocks.speed;
-    else
-        players["you"].speedX = 0;
+    if (blocks.sp) {
+        if (fruit.x - blocks.speed > players["you"].x)
+            players["you"].speedX = blocks.speed;
+        else if (fruit.x + blocks.speed < players["you"].x)
+            players["you"].speedX = -blocks.speed;
+        else
+            players["you"].speedX = 0;
 
-    if (fruit.y-blocks.speed > players["you"].y)
-        players["you"].speedY =blocks.speed;
-    else if (fruit.y+blocks.speed < players["you"].y)
-        players["you"].speedY = -blocks.speed;
-    else
-        players["you"].speedY = 0;
-    // ↑ bot
+        if (fruit.y - blocks.speed > players["you"].y)
+            players["you"].speedY = blocks.speed;
+        else if (fruit.y + blocks.speed < players["you"].y)
+            players["you"].speedY = -blocks.speed;
+        else
+            players["you"].speedY = 0;
+    }
 
     players["you"].newPos();
     players["you"].update();
@@ -202,15 +235,22 @@ function updateGameArea() {
     players["me"].newPos();
     players["me"].update();
 
-    if (players["me"].crashWith(fruit))
-        players["me"].score++; // <-- send WebSockets request
+    if (players["me"].crashWith(fruit)) {
+        while (players["me"].crashWith(fruit) || players["you"].crashWith(fruit))
+            fruit.newPos(true);
 
-    // ↓ bot
-    if (players["you"].crashWith(fruit))
+        players["me"].score++;
+        websocket.send(JSON.stringify({
+            event:"game",
+            data: {
+                type: "scored",
+                fruitX: fruit.x,
+                fruitY: fruit.y
+            }}));
+    }
+
+    if (blocks.sp && players["you"].crashWith(fruit))
         players["you"].score++;
-    // ↑ bot
 
-    while (players["me"].crashWith(fruit) || players["you"].crashWith(fruit))
-        fruit.newPos(true);
     fruit.update();
 }
