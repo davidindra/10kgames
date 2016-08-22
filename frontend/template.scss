@@ -33,16 +33,19 @@ canvas {
   text-align: center;
 }
 
+.gray {
+  color: gray;
+}
+
 .scoreDiv {
   font-size: 4em;
   top: calc(50% - .5em);
 
-  &.grayScore { // opponent score
-    color: gray;
+  &.rightScore { // opponent score
     right: 0;
   }
 
-  &.whiteScore { // player score
+  &.leftScore { // player score
     left: 0;
   }
 }
@@ -51,12 +54,11 @@ canvas {
   font-size: 2em;
   top: calc((100vh - 400px) / 2);
 
-  &.grayName {
-    color: gray;
+  &.rightName {
     right: 0;
   }
 
-  &.whiteName {
+  &.leftName {
     left: 0;
   }
 }
@@ -72,6 +74,7 @@ input {
   font-family: 'VT323', monospace;
   font-size: .9em;
   padding: .2em;
+  text-align: center;
 }
 
 button {

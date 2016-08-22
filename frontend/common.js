@@ -43,11 +43,12 @@ function submitName() {
     }));
 }
 
-function startGame(data) {
+function startGame(data, sp) {
     id("game").show();
     if (data.gamename == "blocks") {
         id("loading").hide();
-        drawBlocks(nickname, data.opponent.username);
+        sp = (sp) ? true : false;
+        drawBlocks(nickname, data.opponent.username, data.side, sp);
         blocks.start();
     }
 }
@@ -56,7 +57,7 @@ window.onbeforeunload = function() {
     websocket.send(JSON.stringify({'event':'disconnect'}));
 };
 
-var websocket = new WebSocket("ws://localhost:9000");
+var websocket = new WebSocket("ws://"+window.location.hostname+":9000");
 websocket.onmessage = function(evt) {
     var data = JSON.parse(evt.data);
     console.log(data);
@@ -77,11 +78,11 @@ websocket.onmessage = function(evt) {
         alert("Unknown server error.");
     }
 };
-
+/*
 websocket.onclose = function() {
   alert("Connection closed!");
 };
-
+*/
 websocket.onerror = function() {
   alert("Connection error!");
 };

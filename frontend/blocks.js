@@ -1,15 +1,23 @@
 var players = [],
     fruit;
 
-function drawBlocks(myName, opName) {
+function drawBlocks(myName, opName, mySide, sp) {
+    blocks.mySide = mySide;
+    blocks.sp = sp;
     blocks.draw();
-    players["me"] = new Component(30, 30, "white", 50, 185, 0, myName);
-    players["you"] = new Component(30, 30, "gray", 720, 185, 0, opName);
+    if (mySide == "left") {
+        players["me"] = new Component(30, 30, "white", 50, 185, 0, myName);
+        players["you"] = new Component(30, 30, "gray", 720, 185, 0, opName);
+    } else {
+        players["me"] = new Component(30, 30, "white", 720, 185, 0, myName);
+        players["you"] = new Component(30, 30, "gray", 50, 185, 0, opName);
+    }
     fruit = new Component(10, 10, "red", 395, 195, false);
     updateGameArea();
 }
 
 function timeOut(text, after) {
+    var texts = {left: "Opponent", right: "You", leftX: 35, rightX: 715};;
     updateGameArea();
     blocks.context.font="150px Courier New";
     blocks.context.fillStyle = "white";
@@ -17,8 +25,10 @@ function timeOut(text, after) {
 
     blocks.context.font="18px Courier New";
     blocks.context.fillStyle = "white";
-    blocks.context.fillText("You", 50, 170);
-    blocks.context.fillText("Opponent", 685, 170);
+    if (blocks.mySide == "left")
+        texts = {left: "You", right: "Opponent", leftX: 50, rightX: 685};
+    blocks.context.fillText(texts.left, texts.leftX, 170);
+    blocks.context.fillText(texts.right, texts.rightX, 170);
     blocks.context.fillText("Catch this", 345, 180);
 
     setTimeout(after, 1000);
@@ -28,6 +38,8 @@ var blocks = {
     canvas: document.createElement("canvas"),
     keys: [],
     speed: 4,
+    mySide: null,
+    sp: false,
     draw: function() {
         this.canvas.width = 800;
         this.canvas.height = 400;
@@ -63,13 +75,19 @@ var blocks = {
 function Component(width, height, color, x, y, score, name) {
     if (score !== false) {
         this.scoreEl = document.createElement("div");
-        this.scoreEl.className = color+"Score scoreDiv";
+        if ((color == "gray" && blocks.mySide == "left") || (color == "white" && blocks.mySide == "right"))
+            this.scoreEl.className = color+" rightScore scoreDiv";
+        else
+            this.scoreEl.className = color+" leftScore scoreDiv";
         id("game").insertBefore(this.scoreEl, id("game").firstChild);
     }
 
     if (name) {
         var div = document.createElement("div");
-        div.className = color+"Name nameDiv";
+        if ((color == "gray" && blocks.mySide == "left") || (color == "white" && blocks.mySide == "right"))
+            div.className = color+" rightName nameDiv";
+        else
+            div.className = color+" leftName nameDiv";
         div.innerHTML = "<b>"+name+"</b>";
         id("game").insertBefore(div, id("game").firstChild);
     }
