@@ -57,7 +57,7 @@ class WebSocketServer
         while (true) { // process forever
             try {
                 $changed = array_values($this->clients); // manage multiple connections
-                socket_select($changed, $null, $null, 0, 0); // return socket resources into $changed[]
+                socket_select($changed, $null, $null, 0, 10); // return socket resources into $changed[]
 
                 if (in_array($socket, $changed)) { // check for new socket connection
                     $rid = mt_rand(1, 9999999); // generate new random ID for the socket
@@ -72,6 +72,22 @@ class WebSocketServer
                 foreach ($changed as $changed_socket) { //loop through all connected sockets
                     while (socket_recv($changed_socket, $buf, 1024, 0) >= 1) { //check for any incoming data
                         if (($key = array_search($changed_socket, $this->clients)) !== false) { // get SID of this user
+                            $unmasked = $this->unmask($buf);
+
+                            $regex = <<<'END'
+/
+  (
+    (?: [\x00-\x7F]                 # single-byte sequences   0xxxxxxx
+    |   [\xC0-\xDF][\x80-\xBF]      # double-byte sequences   110xxxxx 10xxxxxx
+    |   [\xE0-\xEF][\x80-\xBF]{2}   # triple-byte sequences   1110xxxx 10xxxxxx * 2
+    |   [\xF0-\xF7][\x80-\xBF]{3}   # quadruple-byte sequence 11110xxx 10xxxxxx * 3
+    ){1,100}                        # ...one or more times
+  )
+| .                                 # anything else
+/x
+END;
+                            preg_replace($regex, '$1', $unmasked);
+
                             echo 'DBG: ' . $this->unmask($buf) . PHP_EOL;
                             $msg = $this->clientManager->message($key, json_decode($this->unmask($buf), true)); // process the message
                             if ($msg == false) { // client requested end of the session
