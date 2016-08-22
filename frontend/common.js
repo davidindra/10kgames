@@ -39,12 +39,12 @@ function submitName() {
     nickname = name;
     websocket.send(JSON.stringify({
         "event": "changename",
-        "newName": name
+        "newname": name
     }));
 }
 
 function startGame(data) {
-    id ("game").show();
+    id("game").show();
     if (data.gamename == "blocks") {
         id("loading").hide();
         drawBlocks(nickname, data.opponent.username);
