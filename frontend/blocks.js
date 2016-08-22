@@ -151,19 +151,19 @@ Component.prototype = {
         if (rand)
             return this.setPos(Math.floor(Math.random() * (blocks.canvas.width - this.width)), Math.floor(Math.random() * (blocks.canvas.height - this.height)));
 
-    	if (this.x < 0-this.width)
-        	this.x =blocks.canvas.width;
+        if (this.x < 0-this.width)
+            this.x =blocks.canvas.width;
         else if (this.x >blocks.canvas.width)
-        	this.x = 0-this.width;
+            this.x = 0-this.width;
         else
-        	this.x += this.speedX;
+            this.x += this.speedX;
 
-    	if (this.y < 0-this.height)
-        	this.y =blocks.canvas.height;
+        if (this.y < 0-this.height)
+            this.y =blocks.canvas.height;
         else if (this.y >blocks.canvas.height)
-        	this.y = 0-this.height;
+            this.y = 0-this.height;
         else
-        	this.y += this.speedY;
+            this.y += this.speedY;
     },
 
     crashWith: function(obj) {
@@ -177,10 +177,10 @@ Component.prototype = {
             otherbottom = obj.y + (obj.height),
             crash = true;
         if ((mybottom < othertop) ||
-               (mytop > otherbottom) ||
-               (myright < otherleft) ||
-               (myleft > otherright)) {
-           crash = false;
+            (mytop > otherbottom) ||
+            (myright < otherleft) ||
+            (myleft > otherright)) {
+            crash = false;
         }
         return crash;
     },
@@ -196,7 +196,7 @@ Component.prototype = {
         else if (blocks.keys[39])
             players["me"].speedX =blocks.speed;
         else
-           players["me"].speedX = 0;
+            players["me"].speedX = 0;
 
         if (blocks.keys[38])
             players["me"].speedY = -blocks.speed;
@@ -216,13 +216,13 @@ Component.prototype = {
                     x: me.x,
                     y: me.y
                 }
-            })+"\r\n");
+            }));
         }
     }
 };
 
 function updateGameArea() {
-   blocks.clear();
+    blocks.clear();
     if (blocks.sp) {
         if (fruit.x - blocks.speed > players["you"].x)
             players["you"].speedX = blocks.speed;
@@ -254,21 +254,20 @@ function updateGameArea() {
         }
     }
 
-    if (players["me"].crashWith(fruit) && !blocks.sp) {
-        websocket.send(JSON.stringify({
-            event:"game",
-            data: {
-                type: "scored",
-                fruitX: fruit.x,
-                fruitY: fruit.y
-            }}));
-    }
-
     if (players["me"].crashWith(fruit)) {
         players["me"].score++;
         while (players["me"].crashWith(fruit) || players["you"].crashWith(fruit))
             fruit.newPos(true);
 
+        if (!blocks.sp)
+            websocket.send(JSON.stringify({
+                event:"game",
+                data: {
+                    type: "scored",
+                    fruitX: fruit.x,
+                    fruitY: fruit.y
+                }
+            }));
         if (players["me"].score >= blocks.maxScore) {
             if (!blocks.sp)
                 websocket.send(JSON.stringify({event: "game", data: {type: "gameOver"}}));
