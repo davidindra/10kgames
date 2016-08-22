@@ -59,8 +59,6 @@ class ClientManager implements IClientManager{
 
     public function message($sid, $msg)
     {
-        echo 'MSG: ' . $sid . ': ' . json_encode($msg) . PHP_EOL;
-
         $response = ['event' => @$msg['event']];
         switch(@strtolower(@$msg['event'])){
             case 'disconnect':
@@ -133,6 +131,8 @@ class ClientManager implements IClientManager{
                 $response['state'] = 'error';
                 Res::wss()->send($response, $sid);
         }
+
+        echo 'MSG: ' . $sid . ': ' . json_encode($msg) . PHP_EOL;
 
         return true;
     }
