@@ -57,7 +57,7 @@ class WebSocketServer
         while (true) { // process forever
             try {
                 $changed = array_values($this->clients); // manage multiple connections
-                socket_select($changed, $null, $null, 0, 10); // return socket resources into $changed[]
+                socket_select($changed, $null, $null, 0, 0); // return socket resources into $changed[]
 
                 if (in_array($socket, $changed)) { // check for new socket connection
                     $rid = mt_rand(1, 9999999); // generate new random ID for the socket
