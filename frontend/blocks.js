@@ -216,7 +216,7 @@ Component.prototype = {
                     x: me.x,
                     y: me.y
                 }
-            }));
+            })+"\r\n");
         }
     }
 };
