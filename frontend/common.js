@@ -19,16 +19,15 @@ setInterval(function() {
     id("loading-header").innerHTML += ".";
     x++;
     if (x == 3) {
-        var substr = id("loading-header").innerHTML.trim().slice(0, -3);
-        id("loading-header").innerHTML = substr;
+        id("loading-header").innerHTML = id("loading-header").innerHTML.trim().slice(0, -3);
         x = 0;
     }
 }, 500);
 
-function load(gametype) {
+function load(gamename) {
     websocket.send(JSON.stringify({
         "event": "queue",
-        "gametype": gametype
+        "gamename": gamename
     }));
 }
 
