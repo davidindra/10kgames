@@ -58,7 +58,35 @@ class Game{
     }
 
     public function startGame(){
-        // todo
+        Res::wss()->send(
+            [
+                'event' => 'gameready',
+                'gamename' => $this->type,
+                'side' => 'left',
+                'opponent' =>
+                    [
+                        'username' => $this->playerTwo->getUsername(),
+                        'overallscore' => $this->playerTwo->getScore()
+                    ],
+                'state' => 'ok'
+            ],
+            $this->playerOne->getSid()
+        );
+
+        Res::wss()->send(
+            [
+                'event' => 'gameready',
+                'gamename' => $this->type,
+                'side' => 'right',
+                'opponent' =>
+                    [
+                        'username' => $this->playerOne->getUsername(),
+                        'overallscore' => $this->playerOne->getScore()
+                    ],
+                'state' => 'ok'
+            ],
+            $this->playerTwo->getSid()
+        );
     }
 
     public function processMessage($sid, $msg){

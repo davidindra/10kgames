@@ -80,6 +80,11 @@ class ClientManager implements IClientManager{
 
                 $this->queue->match();
                 break;
+            case 'queueleave':
+                $this->queue->removeMember($sid);
+                $response['state'] = 'ok';
+                Res::wss()->send($response, $sid);
+                break;
             case 'game':
                 $response['state'] = 'TODO';
                 Res::wss()->send($response, $sid);

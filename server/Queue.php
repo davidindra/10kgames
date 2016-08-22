@@ -63,41 +63,10 @@ class Queue{
                     $sortedMembers[$queueMember->getGame()]->getPlayer(),
                     $queueMember->getPlayer()
                 );
+                $this->gameManager->startGame($game);
 
-                $playerOne = $sortedMembers[$queueMember->getGame()]->getPlayer();
-                $playerTwo = $queueMember->getPlayer();
-                Res::wss()->send(
-                    [
-                        'event' => 'gameready',
-                        'gamename' => $queueMember->getGame(),
-                        'side' => 'left',
-                        'opponent' =>
-                            [
-                                'username' => $playerTwo->getUsername(),
-                                'overallscore' => $playerTwo->getScore()
-                            ],
-                        'state' => 'ok'
-                    ],
-                    $playerOne->getSid()
-                );
-
-                Res::wss()->send(
-                    [
-                        'event' => 'gameready',
-                        'gamename' => $queueMember->getGame(),
-                        'side' => 'right',
-                        'opponent' =>
-                            [
-                                'username' => $playerOne->getUsername(),
-                                'overallscore' => $playerOne->getScore()
-                            ],
-                        'state' => 'ok'
-                    ],
-                    $playerTwo->getSid()
-                );
-
-                $this->removeMember($playerOne->getSid());
-                $this->removeMember($playerTwo->getSid());
+                $this->removeMember($sortedMembers[$queueMember->getGame()]->getPlayer()->getSid());
+                $this->removeMember($queueMember->getPlayer()->getSid());
             }else{
                 $sortedMembers[$queueMember->getGame()] = $queueMember;
             }
