@@ -29,4 +29,8 @@ class PlayerManager{
         }
         return false;
     }
+
+    public function playersCount(){
+        return count($this->players);
+    }
 }

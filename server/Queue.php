@@ -21,12 +21,31 @@ class Queue{
         $this->gameManager = $gameManager;
     }
 
+    public function findMember($sid){
+        foreach($this->queue as $key => $queueMember){
+            if($queueMember->getPlayer()->getSid() == $sid){
+                return $this->queue[$key];
+            }
+        }
+        return false;
+    }
+
     public function removeMember($sid){
         foreach($this->queue as $key => $queueMember){
             if($queueMember->getPlayer()->getSid() == $sid){
                 unset($this->queue[$key]);
+                return true;
             }
         }
+        return false;
+    }
+
+    public function findGame($sid){
+        return $this->gameManager->findGame($sid);
+    }
+
+    public function stopGames($sid){
+        $this->gameManager->endGame($sid);
     }
 
     public function add(QueueMember $newQueueMember){
@@ -43,15 +62,6 @@ class Queue{
             default:
                 return $nth . 'th';
         }
-    }
-
-    public function findMember($sid){
-        foreach($this->queue as $key => $queueMember){
-            if($queueMember->getPlayer()->getSid() == $sid){
-                return $this->queue[$key];
-            }
-        }
-        return false;
     }
 
     public function match(){
@@ -73,7 +83,7 @@ class Queue{
         }
     }
 
-    public function stopGames($sid){
-        $this->gameManager->endGame($sid);
+    public function processMessage($sid, $msg){
+        return $this->gameManager->processMessage($sid, $msg);
     }
 }

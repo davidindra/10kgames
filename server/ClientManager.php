@@ -35,7 +35,14 @@ class ClientManager implements IClientManager{
         $player = new Player($sid, $ip);
         $this->playerManager->addPlayer($player);
 
-        Res::wss()->send(['username' => $player->getUsername(), 'state' => 'connected'], $sid);
+        Res::wss()->send(
+            [
+                'username' => $player->getUsername(),
+                'playerscount' => $this->playerManager->playersCount() - 1,
+                'state' => 'connected'
+            ],
+            $sid
+        );
 
         echo 'NEW: ' . $ip . ' (' . $sid . ')' . PHP_EOL;
     }
@@ -45,7 +52,6 @@ class ClientManager implements IClientManager{
         Res::wss()->send(['state' => 'disconnected'], $sid);
 
         $this->queue->removeMember($sid);
-        $this->queue->stopGames($sid);
         $this->playerManager->removePlayer($sid);
 
         echo 'DIE: ' . $sid . PHP_EOL;
@@ -60,20 +66,45 @@ class ClientManager implements IClientManager{
             case 'disconnect':
                 return false;
             case 'changename':
-                $this->playerManager->findPlayer($sid)->setUsername(@$msg['newname']);
-                $response['newname'] = @$msg['newname'];
-                $response['state'] = 'ok';
-                Res::wss()->send($response, $sid);
-                break;
-            case 'queue': // TODO: validate game names!
-                if($this->queue->findMember($sid)){
-                    $response['error'] = 'already in a queue';
+                if(!isset($msg['newname'])){
+                    $response['error'] = 'newname missing';
                     $response['state'] = 'error';
                     Res::wss()->send($response, $sid);
                     break;
                 }
 
-                $queueMember = new QueueMember($this->playerManager->findPlayer($sid), $msg['gametype']);
+                $this->playerManager->findPlayer($sid)->setUsername(@$msg['newname']);
+                $response['newname'] = $msg['newname'];
+                $response['state'] = 'ok';
+                Res::wss()->send($response, $sid);
+                break;
+            case 'queue':
+                if(!isset($msg['gamename'])){
+                    $response['error'] = 'gamename missing';
+                    $response['state'] = 'error';
+                    Res::wss()->send($response, $sid);
+                    break;
+                }
+                if($msg['gamename'] != 'blocks' && $msg['gamename'] != 'snake'){
+                    $response['error'] = 'unknown gamename - allowed are blocks and snake';
+                    $response['state'] = 'error';
+                    Res::wss()->send($response, $sid);
+                    break;
+                }
+
+                if($this->queue->findMember($sid)){
+                    $response['error'] = 'already in a queue';
+                    $response['state'] = 'error';
+                    Res::wss()->send($response, $sid);
+                    break;
+                }elseif($this->queue->findGame($sid)){
+                    $response['error'] = 'already in a game';
+                    $response['state'] = 'error';
+                    Res::wss()->send($response, $sid);
+                    break;
+                }
+
+                $queueMember = new QueueMember($this->playerManager->findPlayer($sid), $msg['gamename']);
                 $response['nth'] = $this->queue->add($queueMember);
                 $response['state'] = 'ok';
                 Res::wss()->send($response, $sid);
@@ -81,17 +112,25 @@ class ClientManager implements IClientManager{
                 $this->queue->match();
                 break;
             case 'queueleave':
-                $this->queue->removeMember($sid);
-                $response['state'] = 'ok';
+                if($this->queue->removeMember($sid)) {
+                    $response['state'] = 'ok';
+                }else{
+                    $response['error'] = 'not in a queue';
+                    $response['state'] = 'error';
+                }
                 Res::wss()->send($response, $sid);
                 break;
             case 'game':
-                $response['state'] = 'TODO';
-                Res::wss()->send($response, $sid);
+                if(!$this->queue->processMessage($sid, $msg)) {
+                    $response['error'] = 'not in a game';
+                    $response['state'] = 'error';
+                    Res::wss()->send($response, $sid);
+                }
 
                 break;
             default:
-                $response['state'] = 'unknown';
+                $response['error'] = 'unknown command';
+                $response['state'] = 'error';
                 Res::wss()->send($response, $sid);
         }
 

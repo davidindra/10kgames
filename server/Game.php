@@ -10,6 +10,12 @@ class Game{
      * @var Player
      */
     private $playerOne;
+
+    /**
+     * @var mixed
+     */
+    public $stateOne;
+
     /**
      * @var Player
      */
@@ -18,7 +24,7 @@ class Game{
     /**
      * @var mixed
      */
-    public $state;
+    public $stateTwo;
 
     /**
      * Game constructor.
@@ -90,7 +96,56 @@ class Game{
     }
 
     public function processMessage($sid, $msg){
-        // todo
+        if(@$msg['event'] == 'game' && isset($msg['data'])){
+            if($this->playerOne->getSid() == $sid){
+                $this->stateOne = $msg['data'];
+                Res::wss()->send(
+                    [
+                        'event' => 'game',
+                        'gamename' => $this->type,
+                        'opponentdata' => $msg['data'],
+                        'state' => 'ok'
+                    ],
+                    $this->playerTwo->getSid()
+                );
+                Res::wss()->send(
+                    [
+                        'event' => 'game',
+                        'gamename' => $this->type,
+                        'state' => 'ok'
+                    ],
+                    $this->playerOne->getSid()
+                );
+            }else{
+                $this->stateTwo = $msg['data'];
+                Res::wss()->send(
+                    [
+                        'event' => 'game',
+                        'gamename' => $this->type,
+                        'opponentdata' => $msg['data'],
+                        'state' => 'ok'
+                    ],
+                    $this->playerOne->getSid()
+                );
+                Res::wss()->send(
+                    [
+                        'event' => 'game',
+                        'gamename' => $this->type,
+                        'state' => 'ok'
+                    ],
+                    $this->playerTwo->getSid()
+                );
+            }
+        }else{
+            Res::wss()->send(
+                [
+                    'error' => 'unknown message delivered to Game processor',
+                    'state' => 'error'
+                ],
+                $sid
+            );
+        }
+        return true;
     }
 
     public function endGame($sid = null){

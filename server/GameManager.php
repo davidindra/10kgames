@@ -7,27 +7,31 @@ class GameManager{
      */
     private $games = [];
 
+    public function findGame($sid){
+        foreach($this->games as $game){
+            if($game->getPlayerOne()->getSid() == $sid || $game->getPlayerTwo()->getSid() == $sid){
+                return $game;
+            }
+        }
+        return false;
+    }
+
     public function startGame(Game $game){
         $this->games[] = $game;
         $game->startGame();
     }
 
     public function processMessage($sid, $msg){
-        foreach($this->games as $game){
-            if($game->getPlayerOne()->getSid() == $sid || $game->getPlayerTwo()->getSid() == $sid){
-                $game->processMessage($sid, $msg);
-                return true;
-            }
+        if($game = $this->findGame($sid)) {
+            return $game->processMessage($sid, $msg);
         }
         return false;
     }
 
     public function endGame($sid){
-        foreach($this->games as $game){
-            if($game->getPlayerOne()->getSid() == $sid || $game->getPlayerTwo()->getSid() == $sid){
-                $game->endGame($sid);
-                return true;
-            }
+        if($game = $this->findGame($sid)) {
+            $game->endGame($sid);
+            return true;
         }
         return false;
     }
