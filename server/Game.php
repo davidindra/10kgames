@@ -93,7 +93,42 @@ class Game{
         // todo
     }
 
-    public function endGame($sid){
-        // todo
+    public function endGame($sid = null){
+        if($this->playerOne->getSid() == $sid){
+            Res::wss()->send(
+                [
+                    'event' => 'opponentleft',
+                    'gamename' => $this->type,
+                    'state' => 'ok'
+                ],
+                $this->playerTwo->getSid()
+            );
+        }elseif($this->playerTwo->getSid() == $sid){
+            Res::wss()->send(
+                [
+                    'event' => 'opponentleft',
+                    'gamename' => $this->type,
+                    'state' => 'ok'
+                ],
+                $this->playerOne->getSid()
+            );
+        }else{
+            Res::wss()->send(
+                [
+                    'event' => 'gameend',
+                    'gamename' => $this->type,
+                    'state' => 'ok'
+                ],
+                $this->playerOne->getSid()
+            );
+            Res::wss()->send(
+                [
+                    'event' => 'gameend',
+                    'gamename' => $this->type,
+                    'state' => 'ok'
+                ],
+                $this->playerTwo->getSid()
+            );
+        }
     }
 }

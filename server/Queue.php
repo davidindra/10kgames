@@ -72,4 +72,8 @@ class Queue{
             }
         }
     }
+
+    public function stopGames($sid){
+        $this->gameManager->endGame($sid);
+    }
 }

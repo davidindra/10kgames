@@ -45,8 +45,8 @@ class ClientManager implements IClientManager{
         Res::wss()->send(['state' => 'disconnected'], $sid);
 
         $this->queue->removeMember($sid);
+        $this->queue->stopGames($sid);
         $this->playerManager->removePlayer($sid);
-        // TODO: stop running games!
 
         echo 'DIE: ' . $sid . PHP_EOL;
     }
