@@ -45,6 +45,7 @@ var blocks = {
     speed: 4,
     mySide: null,
     sp: false,
+    maxScore: 50,
     draw: function() {
         this.canvas.width = 800;
         this.canvas.height = 400;
@@ -61,7 +62,7 @@ var blocks = {
     },
     begin: function() {
         updateGameArea();
-        this.interval = setInterval(updateGameArea, 15);
+        blocks.interval = setInterval(updateGameArea, 15);
         window.addEventListener('keydown', function (e) {
             if (e.keyCode in blocks.keys && blocks.keys[e.keyCode] !== true) {
                 blocks.keys[e.keyCode] = true;
@@ -84,13 +85,26 @@ var blocks = {
         if (data.type == "scored") {
             players["you"].score++;
             fruit.setPos(data.fruitX, data.fruitY);
-        }
-        else if (data.type == "directionChange") {
+        } else if (data.type == "directionChange") {
             players["you"].x = data.x;
             players["you"].y = data.y;
             players["you"].speedX = data.speedX;
             players["you"].speedY = data.speedY;
+        } else if (data.type == "gameOver") {
+            blocks.gameOver(false);
         }
+    },
+    gameOver: function(won) {
+        var text = "You lost :(";
+        clearInterval(blocks.interval);
+        updateGameArea();
+        blocks.context.font="70px Courier New";
+        blocks.context.fillStyle = "white";
+        blocks.context.fillText("Game over", 210, 150);
+        blocks.context.font="35px Courier New";
+        if (won)
+            text = "You win! :)";
+        blocks.context.fillText(text, 300, 200);
     }
 };
 
@@ -191,28 +205,24 @@ Component.prototype = {
         else
             players["me"].speedY = 0;
 
-        var me = players["me"];
-        websocket.send(JSON.stringify({
-            event:"game",
-            data: {
-                type: "directionChange",
-                speedX: me.speedX,
-                speedY: me.speedY,
-                x: me.x,
-                y: me.y
-            }}));
+        if (!blocks.sp) {
+            var me = players["me"];
+            websocket.send(JSON.stringify({
+                event: "game",
+                data: {
+                    type: "directionChange",
+                    speedX: me.speedX,
+                    speedY: me.speedY,
+                    x: me.x,
+                    y: me.y
+                }
+            }));
+        }
     }
 };
 
 function updateGameArea() {
    blocks.clear();
-
-    /*
-    players["you"].setPos(x, y); <-- set from WebSockets request
-    players["you"].speedX = 0; <-- set from WebSockets request
-    players["you"].speedY = 0; <-- set from WebSockets request
-    */
-
     if (blocks.sp) {
         if (fruit.x - blocks.speed > players["you"].x)
             players["you"].speedX = blocks.speed;
@@ -235,11 +245,28 @@ function updateGameArea() {
     players["me"].newPos();
     players["me"].update();
 
+    if (blocks.sp && players["you"].crashWith(fruit)) {
+        players["you"].score++;
+        while (players["me"].crashWith(fruit) || players["you"].crashWith(fruit))
+            fruit.newPos(true);
+        if (players["you"].score >= blocks.maxScore) {
+            blocks.gameOver(false);
+        }
+    }
+
     if (players["me"].crashWith(fruit)) {
+        players["me"].score++;
         while (players["me"].crashWith(fruit) || players["you"].crashWith(fruit))
             fruit.newPos(true);
 
-        players["me"].score++;
+        if (players["me"].score >= blocks.maxScore) {
+            if (!sp)
+                websocket.send(JSON.stringify({event: "game", data: {type: "gameOver"}}));
+            blocks.gameOver(true);
+        }
+    }
+
+    if (players["me"].crashWith(fruit) && !blocks.sp) {
         websocket.send(JSON.stringify({
             event:"game",
             data: {
@@ -248,9 +275,6 @@ function updateGameArea() {
                 fruitY: fruit.y
             }}));
     }
-
-    if (blocks.sp && players["you"].crashWith(fruit))
-        players["you"].score++;
 
     fruit.update();
 }
