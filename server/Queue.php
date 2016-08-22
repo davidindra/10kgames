@@ -58,6 +58,12 @@ class Queue{
         $sortedMembers = array();
         foreach ($this->queue as $queueMember) {
             if(isset($sortedMembers[$queueMember->getGame()])){
+                $game = new Game(
+                    $queueMember->getGame(),
+                    $sortedMembers[$queueMember->getGame()]->getPlayer(),
+                    $queueMember->getPlayer()
+                );
+
                 $playerOne = $sortedMembers[$queueMember->getGame()]->getPlayer();
                 $playerTwo = $queueMember->getPlayer();
                 $webSocketServer->send(

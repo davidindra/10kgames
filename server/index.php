@@ -23,4 +23,10 @@ $server = new WebSocketServer($clientManager); // WebSocketServer works with raw
 $clientManager->setWebSocketServer($server); // ClientManager takes all the requests and routes it
 $gameManager->setWebSocketServer($server); // GameManager needs to send messages to players
 
+class Res{ /** @var WebSocketServer */
+      public static $wss;
+      public static function wss(){return self::$wss;} } // really stupid static class for supplying WebSocketServer
+
+Res::$wss = $server;
+
 $server->run(); // launch an infinite loop

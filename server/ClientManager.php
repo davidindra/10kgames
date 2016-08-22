@@ -78,7 +78,7 @@ class ClientManager implements IClientManager{
                 $response['state'] = 'ok';
                 $this->webSocketServer->send($response, $sid);
                 break;
-            case 'queue':
+            case 'queue': // TODO: validate game names!
                 if($this->queue->findMember($sid)){
                     $response['error'] = 'already in a queue';
                     $response['state'] = 'error';

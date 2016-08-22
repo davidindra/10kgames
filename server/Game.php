@@ -15,7 +15,10 @@ class Game{
      */
     private $playerTwo;
 
-    private $state;
+    /**
+     * @var mixed
+     */
+    public $state;
 
     /**
      * Game constructor.
@@ -55,18 +58,27 @@ class Game{
     }
 
     /**
-     * @return mixed
+     * @var WebSocketServer
      */
-    public function getState()
-    {
-        return $this->state;
-    }
+    private $webSocketServer;
 
     /**
-     * @param mixed $state
+     * @param WebSocketServer $webSocketServer
      */
-    public function setState($state)
+    public function setWebSocketServer(WebSocketServer $webSocketServer)
     {
-        $this->state = $state;
+        $this->webSocketServer = $webSocketServer;
+    }
+
+    public function startGame(){
+        // todo
+    }
+
+    public function processMessage($sid, $msg){
+        // todo
+    }
+
+    public function endGame($sid){
+        // todo
     }
 }
