@@ -103,6 +103,7 @@
         </div>
     </section>
 </noscript>
+<?php $ua = $_SERVER['HTTP_USER_AGENT']; if(strpos($ua, 'Lynx') === false && strpos($ua, 'Links') === false){ ?>
 <div id="login">
     <h1>10kGames</h1>
     <h4>online multiplayer gaming portal</h4>
@@ -141,5 +142,6 @@
 </div>
 <div id="game">
 </div>
+<?php } ?>
 </body>
 </html>
