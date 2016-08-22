@@ -86,10 +86,10 @@ class WebSocketServer
 | .                                 # anything else
 /x
 END;
-                            preg_replace($regex, '$1', $unmasked);
+                            $unmasked = preg_replace($regex, '$1', $unmasked);
 
-                            echo 'DBG: ' . $this->unmask($buf) . PHP_EOL;
-                            $msg = $this->clientManager->message($key, json_decode($this->unmask($buf), true)); // process the message
+                            echo 'DBG: ' . $unmasked . PHP_EOL;
+                            $msg = $this->clientManager->message($key, json_decode($unmasked, true)); // process the message
                             if ($msg == false) { // client requested end of the session
                                 $this->clientManager->clientDied($key); // manage client's disconnection
                                 unset($this->clients[$key]); // remove from array of clients
