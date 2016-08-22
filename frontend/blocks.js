@@ -260,7 +260,7 @@ function updateGameArea() {
             fruit.newPos(true);
 
         if (players["me"].score >= blocks.maxScore) {
-            if (!sp)
+            if (!blocks.sp)
                 websocket.send(JSON.stringify({event: "game", data: {type: "gameOver"}}));
             blocks.gameOver(true);
         }
