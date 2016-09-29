@@ -18,16 +18,10 @@ var x = 0,
     dot = ".",
     nickname;
 setInterval(function() {
-    var dotnum = x % (maxdots*2) > (maxdots - 1) ? (maxdots - 1) - x % maxdots : x % maxdots + 1;
-
-    id("loading-header").innerHTML = "Waiting for opponent" + dot.repeat(dotnum);
-
+    var dotnum = (x % (maxdots*2) > (maxdots - 1) ? (maxdots - 1) - x % maxdots : x % maxdots + 1) + 1;
+    id("loading-header").innerHTML = "Waiting for opponent<br>" + dot.repeat(dotnum);
     x++;
-    /*if (x == 3) {
-        id("loading-header").innerHTML = id("loading-header").innerHTML.trim().slice(0, -3);
-        x = 0;
-    }*/
-}, 500);
+}, 300);
 
 function load(gamename) {
     websocket.send(JSON.stringify({

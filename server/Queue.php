@@ -54,13 +54,13 @@ class Queue{
         $nth = count($this->queue);
         switch($nth){
             case 1:
-                return '1st';
+                return '1<sup>st</sup>';
             case 2:
-                return '2nd';
+                return '2<sup>nd</sup>';
             case 3:
-                return '3rd';
+                return '3<sup>rd</sup>';
             default:
-                return $nth . 'th';
+                return $nth . '<sup>th</sup>';
         }
     }
 
