@@ -92,13 +92,18 @@ button {
   border-collapse: collapse;
   position: fixed;
   top: calc((100vh - 400px) / 2);
-  left: calc((100vw - 600px) / 2);
+  left: calc((100vw - 300px) / 2);
 
   td {
     border: 1px dashed white;
     width: 300px;
     height: 200px;
     cursor: pointer;
+
+    &.soon {
+      color: #979797;
+      cursor: default;
+    }
   }
 }
 

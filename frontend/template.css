@@ -69,12 +69,15 @@ button {
   border-collapse: collapse;
   position: fixed;
   top: calc((100vh - 400px) / 2);
-  left: calc((100vw - 600px) / 2); }
+  left: calc((100vw - 300px) / 2); }
   #gameChoose table td {
     border: 1px dashed white;
     width: 300px;
     height: 200px;
     cursor: pointer; }
+    #gameChoose table td.soon {
+      color: #979797;
+      cursor: default; }
 
 noscript div {
   display: initial !important; }

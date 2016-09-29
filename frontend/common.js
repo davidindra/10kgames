@@ -14,14 +14,19 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 var x = 0,
+    maxdots = 5,
+    dot = ".",
     nickname;
 setInterval(function() {
-    id("loading-header").innerHTML += ".";
+    var dotnum = x % (maxdots*2) > (maxdots - 1) ? (maxdots - 1) - x % maxdots : x % maxdots + 1;
+
+    id("loading-header").innerHTML = "Waiting for opponent" + dot.repeat(dotnum);
+
     x++;
-    if (x == 3) {
+    /*if (x == 3) {
         id("loading-header").innerHTML = id("loading-header").innerHTML.trim().slice(0, -3);
         x = 0;
-    }
+    }*/
 }, 500);
 
 function load(gamename) {

@@ -121,16 +121,10 @@
             <td onclick="load('blocks')">
                 <h4>Blocks</h4>
             </td>
-            <td>
-                <h4>Some game</h4>
-            </td>
         </tr>
         <tr>
-            <td>
-                <h4>Other game</h4>
-            </td>
-            <td>
-                <h4>Last game</h4>
+            <td class="soon">
+                <h4>More games coming soon!</h4>
             </td>
         </tr>
     </table>
@@ -138,7 +132,7 @@
 <div id="loading">
     <h1 id="loading-header">Waiting for an opponent</h1>
     <h4>You're <span id="queue"></span> in the queue.</h4>
-    <button onclick="startGame({gamename: 'blocks', side: 'left', opponent: {username: 'GameBot'}}, true)">Simulovat druhého hráče</button>
+    <button onclick="startGame({gamename: 'blocks', side: 'left', opponent: {username: 'GameBot'}}, true)">Simulate 2<sup>nd</sup> player</button>
 </div>
 <div id="game">
 </div>
