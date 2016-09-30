@@ -44,20 +44,33 @@ var blocks = {
         updateGameArea();
         blocks.interval = setInterval(updateGameArea, 15); // periodically update canvas
 
-        window.addEventListener('keydown', e => {
-            if (e.keyCode in blocks.keys && blocks.keys[e.keyCode] !== true) { // arrow key has been pressed
-                blocks.keys[e.keyCode] = true;
-                players["me"].directionChange();
-            }
-        });
+        // add listeners for arrows
+        window.addEventListener('keydown', blocks._handleKeyDown);
+        window.addEventListener('keyup', blocks._handleKeyUp);
+    },
 
-        window.addEventListener('keyup', e => {
-            if (e.keyCode in blocks.keys) { // arrow key has been unpressed
-                blocks.keys[e.keyCode] = false;
-                players["me"].directionChange();
-            }
-        });
 
+
+    /**
+     * Handle key down
+     */
+    _handleKeyDown: e => {
+        if (e.keyCode in blocks.keys && blocks.keys[e.keyCode] !== true) { // arrow key has been pressed
+            blocks.keys[e.keyCode] = true;
+            players["me"].directionChange();
+        }
+    },
+
+
+
+    /**
+     * Handle key up
+     */
+    _handleKeyUp: e => {
+        if (e.keyCode in blocks.keys) { // arrow key has been unpressed
+            blocks.keys[e.keyCode] = false;
+            players["me"].directionChange();
+        }
     },
 
 
@@ -111,6 +124,10 @@ var blocks = {
         this.context.fillText("Click here to play again!", 225, 270); // write click here...
 
         this.canvas.addEventListener("click", this.leaveGame); // on canvas click
+
+        // remove listeners for arrows
+        window.addEventListener('keydown', blocks._handleKeyDown);
+        window.addEventListener('keyup', blocks._handleKeyUp);
 
         // reset properties of canvas
         this.mySide = null;

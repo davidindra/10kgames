@@ -7,7 +7,7 @@ canvas {
   left: calc((100vw - 800px) / 2);
 }
 
-.nameDiv, .scoreDiv {
+.nameDiv, .scoreDiv { // divs with name and score
   position: fixed;
   width: calc((100vw - 800px) / 2);
   text-align: center;
@@ -17,7 +17,7 @@ canvas {
   color: gray;
 }
 
-.scoreDiv {
+.scoreDiv { // div with score
   font-size: 4em;
   top: calc(50% - .5em);
 
@@ -30,7 +30,7 @@ canvas {
   }
 }
 
-.nameDiv {
+.nameDiv { // div with name
   font-size: 2em;
   top: calc((100vh - 400px) / 2);
 
@@ -65,7 +65,7 @@ button {
 
 #gameChoose, #game {
   h1 {
-    padding-top: 1.25em;  
+    padding-top: 1.25em;
   }
 }
 
