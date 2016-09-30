@@ -1,5 +1,4 @@
-var players = [],
-    fruit;
+var players = [], fruit;
 
 function drawBlocks(myName, opName, mySide, sp) {
     blocks.mySide = mySide;
@@ -167,19 +166,13 @@ Component.prototype = {
     },
 
     crashWith: function(obj) {
-        var myleft = this.x,
-            myright = this.x + (this.width),
-            mytop = this.y,
-            mybottom = this.y + (this.height),
-            otherleft = obj.x,
-            otherright = obj.x + (obj.width),
-            othertop = obj.y,
-            otherbottom = obj.y + (obj.height),
+        var left1 = this.x, right1 = this.x + (this.width), top1 = this.y, bottom1 = this.y + (this.height),
+            left2 = obj.x, right2 = obj.x + (obj.width), top2 = obj.y, bottom2 = obj.y + (obj.height),
             crash = true;
-        if ((mybottom < othertop) ||
-            (mytop > otherbottom) ||
-            (myright < otherleft) ||
-            (myleft > otherright)) {
+        if ((bottom1 < top2) ||
+            (top1 > bottom2) ||
+            (right1 < left2) ||
+            (left1 > right2)) {
             crash = false;
         }
         return crash;
@@ -218,26 +211,29 @@ Component.prototype = {
                 }
             }));
         }
+    },
+
+    autoMove: function() {
+        if (fruit.x - blocks.speed > this.x)
+            this.speedX = blocks.speed-1;
+        else if (fruit.x + blocks.speed < this.x)
+            this.speedX = -blocks.speed-1;
+        else
+            this.speedX = 0;
+
+        if (fruit.y - blocks.speed > this.y)
+            this.speedY = blocks.speed-1;
+        else if (fruit.y + blocks.speed < this.y)
+            this.speedY = -blocks.speed-1;
+        else
+            this.speedY = 0;
     }
 };
 
 function updateGameArea() {
     blocks.clear();
-    if (blocks.sp) {
-        if (fruit.x - blocks.speed > players["you"].x)
-            players["you"].speedX = blocks.speed;
-        else if (fruit.x + blocks.speed < players["you"].x)
-            players["you"].speedX = -blocks.speed;
-        else
-            players["you"].speedX = 0;
-
-        if (fruit.y - blocks.speed > players["you"].y)
-            players["you"].speedY = blocks.speed;
-        else if (fruit.y + blocks.speed < players["you"].y)
-            players["you"].speedY = -blocks.speed;
-        else
-            players["you"].speedY = 0;
-    }
+    if (blocks.sp && typeof blocks.interval !== "undefined")
+        players["you"].autoMove();
 
     players["you"].newPos();
     players["you"].update();
