@@ -136,6 +136,10 @@ class Game{
                     $this->playerTwo->getSid()
                 );
             }
+
+            if(@$msg['data']['type'] == 'gameOver'){
+                return 2;
+            }
         }else{
             Res::wss()->send(
                 [
@@ -145,7 +149,7 @@ class Game{
                 $sid
             );
         }
-        return true;
+        return 1;
     }
 
     public function endGame($sid = null){

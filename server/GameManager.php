@@ -23,7 +23,12 @@ class GameManager{
 
     public function processMessage($sid, $msg){
         if($game = $this->findGame($sid)) {
-            return $game->processMessage($sid, $msg);
+            $processing = $game->processMessage($sid, $msg);
+            if($processing == 2){
+                echo 'GAME END' . PHP_EOL;
+                $this->endGame($sid);
+            }
+            return $processing;
         }
         return false;
     }
@@ -31,6 +36,12 @@ class GameManager{
     public function endGame($sid){
         if($game = $this->findGame($sid)) {
             $game->endGame($sid);
+            foreach($this->games as $key => $game){
+                if($game->getPlayerOne()->getSid() == $sid || $game->getPlayerTwo()->getSid() == $sid){
+                    unset($this->games[$key]);
+                    break;
+                }
+            }
             return true;
         }
         return false;
