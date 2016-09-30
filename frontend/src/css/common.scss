@@ -1,0 +1,17 @@
+// JS & nonJS
+body {
+  background-color: black;
+  color: white;
+  text-align: center;
+  font-family: 'VT323', monospace;
+  font-size: 1.3em;
+  cursor: default;
+}
+
+a {
+  color: white;
+
+  &:hover {
+    color: #808080;
+  }
+}
