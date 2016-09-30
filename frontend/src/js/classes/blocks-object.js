@@ -126,8 +126,8 @@ var blocks = {
         this.canvas.addEventListener("click", this.leaveGame); // on canvas click
 
         // remove listeners for arrows
-        window.addEventListener('keydown', blocks._handleKeyDown);
-        window.addEventListener('keyup', blocks._handleKeyUp);
+        window.removeEventListener('keydown', blocks._handleKeyDown);
+        window.removeEventListener('keyup', blocks._handleKeyUp);
 
         // reset properties of canvas
         this.mySide = null;
