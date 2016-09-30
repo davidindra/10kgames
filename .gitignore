@@ -5,3 +5,4 @@
 !/composer.json
 /deployment*
 /adminer
+node_modules

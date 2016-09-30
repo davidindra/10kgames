@@ -5,10 +5,7 @@
     <title>10kGames</title>
 
     <?php if (isset($_GET['js'])) { ?>
-        <script>
-            <?php require 'common.js';
-            require 'blocks.js'; ?>
-        </script>
+        <script><?php require 'build.js'; ?></script>
     <?php }else{ ?>
         <script>
             if (window.location.search.indexOf("?js") === -1) {
@@ -17,7 +14,7 @@
         </script>
     <?php } ?>
     <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
-    <style><?php require 'template.css'; ?></style>
+    <style><?php require 'build.css'; ?></style>
 </head>
 <body>
 <noscript>
