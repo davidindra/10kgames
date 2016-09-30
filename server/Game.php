@@ -1,7 +1,8 @@
 <?php
 require_once 'Player.php';
 
-class Game{
+class Game
+{
     /**
      * @var string
      */
@@ -63,7 +64,8 @@ class Game{
         return $this->playerTwo;
     }
 
-    public function startGame(){
+    public function startGame()
+    {
         Res::wss()->send(
             [
                 'event' => 'gameready',
@@ -95,9 +97,10 @@ class Game{
         );
     }
 
-    public function processMessage($sid, $msg){
-        if(@$msg['event'] == 'game' && isset($msg['data'])){
-            if($this->playerOne->getSid() == $sid){
+    public function processMessage($sid, $msg)
+    {
+        if (@$msg['event'] == 'game' && isset($msg['data'])) {
+            if ($this->playerOne->getSid() == $sid) {
                 $this->stateOne = $msg['data'];
                 Res::wss()->send(
                     [
@@ -116,7 +119,7 @@ class Game{
                     ],
                     $this->playerOne->getSid()
                 );
-            }else{
+            } else {
                 $this->stateTwo = $msg['data'];
                 Res::wss()->send(
                     [
@@ -137,10 +140,10 @@ class Game{
                 );
             }
 
-            if(@$msg['data']['type'] == 'gameOver'){
+            if (@$msg['data']['type'] == 'gameOver') {
                 return 2;
             }
-        }else{
+        } else {
             Res::wss()->send(
                 [
                     'error' => 'unknown message delivered to Game processor',
@@ -152,42 +155,23 @@ class Game{
         return 1;
     }
 
-    public function endGame($sid = null){
-        if($this->playerOne->getSid() == $sid){
-            Res::wss()->send(
-                [
-                    'event' => 'opponentleft',
-                    'gamename' => $this->type,
-                    'state' => 'ok'
-                ],
-                $this->playerTwo->getSid()
-            );
-        }elseif($this->playerTwo->getSid() == $sid){
-            Res::wss()->send(
-                [
-                    'event' => 'opponentleft',
-                    'gamename' => $this->type,
-                    'state' => 'ok'
-                ],
-                $this->playerOne->getSid()
-            );
-        }else{
-            Res::wss()->send(
-                [
-                    'event' => 'gameend',
-                    'gamename' => $this->type,
-                    'state' => 'ok'
-                ],
-                $this->playerOne->getSid()
-            );
-            Res::wss()->send(
-                [
-                    'event' => 'gameend',
-                    'gamename' => $this->type,
-                    'state' => 'ok'
-                ],
-                $this->playerTwo->getSid()
-            );
-        }
+    public function endGame($sid = null)
+    {
+        Res::wss()->send(
+            [
+                'event' => 'gameend',
+                'gamename' => $this->type,
+                'state' => 'ok'
+            ],
+            $this->playerOne->getSid()
+        );
+        Res::wss()->send(
+            [
+                'event' => 'gameend',
+                'gamename' => $this->type,
+                'state' => 'ok'
+            ],
+            $this->playerTwo->getSid()
+        );
     }
 }
