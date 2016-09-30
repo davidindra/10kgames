@@ -3,6 +3,15 @@ var players = [], fruit;
 
 
 /**
+ * Remove user from Q and start single player
+ */
+function blocksSinglePlayer() {
+    websocket.send(JSON.stringify({'event':'queueleave'})); // leave the Q
+    startGame({gamename: 'blocks', side: 'left', opponent: {username: 'GameBot'}}, true);
+}
+
+
+/**
  * Players are matched, start the game.
  * @param myName: string; Name of this player
  * @param opName: string; Name of Opponent

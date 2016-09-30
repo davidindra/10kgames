@@ -133,7 +133,7 @@
   <div>
     <h1 id="loading-header">Waiting for an opponent</h1>
     <h4>You're <span id="queue"></span> in the queue.</h4>
-    <button onclick="startGame({gamename: 'blocks', side: 'left', opponent: {username: 'GameBot'}}, true)">Simulate 2<sup>nd</sup> player</button>
+    <button onclick="blocksSinglePlayer()">Simulate 2<sup>nd</sup> player</button>
   </div>
 </div>
 <div id="game">

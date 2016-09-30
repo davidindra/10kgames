@@ -9,7 +9,7 @@ var blocks = {
     speed: 4, // moving speed over canvas
     mySide: null, // left or right
     sp: false, // single player
-    maxScore: 25,
+    maxScore: 1,
 
     /**
      * Initialize canvas
@@ -102,8 +102,30 @@ var blocks = {
 
         this.context.font="70px Courier New";
         this.context.fillStyle = "white";
+
         this.context.fillText("Game over", 210, 150); // write Game over
         this.context.font="35px Courier New";
         this.context.fillText(text, 300, 200); // write won/lost
+
+        this.context.font="25px Courier New";
+        this.context.fillText("Click here to play again!", 225, 270); // write click here...
+
+        this.canvas.addEventListener("click", this.leaveGame); // on canvas click
+
+        // reset properties of canvas
+        this.mySide = null;
+        this.interval = undefined;
+    },
+
+
+
+    /**
+     * Leave the game
+     */
+    leaveGame: function() {
+        blocks.canvas.removeEventListener("click", blocks.leaveGame); // remove click listener
+
+        id("game").hide();
+        id("gameChoose").show();
     }
 };
