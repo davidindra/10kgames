@@ -102,7 +102,8 @@
     </section>
 </noscript>
 <?php $ua = $_SERVER['HTTP_USER_AGENT']; if(strpos($ua, 'Lynx') === false && strpos($ua, 'Links') === false){ ?>
-<div id="login">
+<div id="login" class="vcen" data-display="table">
+  <div>
     <h1>10kGames</h1>
     <h4>online multiplayer gaming portal</h4>
     <span>Welcome on 10kGames! 10kGames is a new gaming portal created for 10kApart contest, where everybody can play a few minigames with others.</span>
@@ -111,6 +112,7 @@
         <input type="text" id="nickname" value=""><br>
         <button id="letsPlay" onclick="submitName()">Let's play!</button>
     </div>
+  </div>
 </div>
 <div id="gameChoose">
     <h1>Select game</h1>
@@ -127,10 +129,12 @@
         </tr>
     </table>
 </div>
-<div id="loading">
+<div id="loading" class="vcen" data-display="table">
+  <div>
     <h1 id="loading-header">Waiting for an opponent</h1>
     <h4>You're <span id="queue"></span> in the queue.</h4>
     <button onclick="startGame({gamename: 'blocks', side: 'left', opponent: {username: 'GameBot'}}, true)">Simulate 2<sup>nd</sup> player</button>
+  </div>
 </div>
 <div id="game">
 </div>

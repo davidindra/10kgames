@@ -43,10 +43,6 @@ canvas {
   }
 }
 
-body>div {
-  display: none;
-}
-
 input {
   background-color: black;
   color: white;
@@ -67,6 +63,12 @@ button {
   margin: .5em;
 }
 
+#gameChoose, #game {
+  h1 {
+    padding-top: 1.25em;  
+  }
+}
+
 #gameChoose table {
   border: 1px dashed white;
   border-collapse: collapse;
@@ -84,5 +86,25 @@ button {
       color: #979797;
       cursor: default;
     }
+  }
+}
+
+.vcen { // vertical align: center
+  display: table;
+  height: 100%;
+  width: 100%;
+
+  >div {
+    display: table-cell;
+    height: 100%;
+    width: 100%;
+    vertical-align: middle;
+  }
+}
+
+body>div {
+  display: none;
+  &.vcen { // force vertically centered div to hide too
+    display: none;
   }
 }

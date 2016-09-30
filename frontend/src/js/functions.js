@@ -15,7 +15,8 @@ function id(id) {
  * Show element
  */
 Element.prototype.show = function() {
-    this.style.display = "initial";
+    let display = this.getAttribute("data-display") || "initial";
+    this.style.display = display;
 };
 
 
