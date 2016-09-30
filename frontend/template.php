@@ -135,6 +135,12 @@
 <div id="game">
 </div>
 <?php } ?>
-<div id="mobile-alert">Mobil</div>
+<div id="mobile-alert">
+    <h1>Nah...</h1>
+    <h2>...you say you're on the phone <i>right now</i>?</h2>
+    We feel so bad about this, but... You cannot use this amazing gaming portal on the phone. Just imagine it - how would you control the movement of a brick on 2D game desk <b>by touches</b>? In a browser?<br><br>
+    We don't say that this is impossible, but it's really not easy. But if you want to be able to play on the phone too, your
+    <a href="https://github.com/davidindra/10kgames" target="_blank">pull request</a> is welcome! :)
+</div>
 </body>
 </html>
