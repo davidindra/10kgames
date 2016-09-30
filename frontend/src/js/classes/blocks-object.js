@@ -145,6 +145,9 @@ var blocks = {
     leaveGame: function() {
         blocks.canvas.removeEventListener("click", blocks.leaveGame); // remove click listener
 
+        // logout from game
+        websocket.send(JSON.stringify({event: "logout"}));
+
         id("game").hide();
         id("gameChoose").show();
     }

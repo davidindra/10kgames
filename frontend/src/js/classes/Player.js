@@ -109,9 +109,9 @@ class Player extends Component {
         if (this.score < blocks.maxScore) // game not over yet
             return true;
 
-        // Game over!
-        blocks.gameOver(player);
         if (!blocks.sp) // send info about game over to opponent
             websocket.send(JSON.stringify({event: "game", data: {type: "gameOver", score: this.score}}));
+        // Game over!
+        blocks.gameOver(player);
     }
 }
