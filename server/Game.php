@@ -149,7 +149,7 @@ class Game{
                 $sid
             );
         }
-        return true;
+        return 1;
     }
 
     public function endGame($sid = null){
