@@ -6,15 +6,16 @@
 
     <?php if (isset($_GET['js'])) { ?>
         <script><?php require 'build.js'; ?></script>
+        <style><?php require 'buildJS.css'; ?></style>
     <?php }else{ ?>
         <script>
             if (window.location.search.indexOf("?js") === -1) {
                 window.location = "/?js"; // if user turn on JS at some time after first load
             }
         </script>
+        <style><?php require 'buildNoJS.css'; ?></style>
     <?php } ?>
     <link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
-    <style><?php require 'build.css'; ?></style>
 </head>
 <body>
 <noscript>
