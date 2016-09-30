@@ -100,6 +100,7 @@ class Player extends Component {
                 event:"game",
                 data: {
                     type: "scored",
+                    score: this.score,
                     fruitX: fruit.x,
                     fruitY: fruit.y
                 }
@@ -111,6 +112,6 @@ class Player extends Component {
         // Game over!
         blocks.gameOver(player);
         if (!blocks.sp) // send info about game over to opponent
-            websocket.send(JSON.stringify({event: "game", data: {type: "gameOver"}}));
+            websocket.send(JSON.stringify({event: "game", data: {type: "gameOver", score: this.score}}));
     }
 }

@@ -90,7 +90,7 @@ var blocks = {
      */
     gameEvent: data => {
         if (data.type == "scored") { // player has scored
-            players["you"].score++;
+            players["you"].score = data.score;
             fruit.setPos(data.fruitX, data.fruitY);
         } else if (data.type == "directionChange") { // player has changed direction
             players["you"].x = data.x;
@@ -99,6 +99,7 @@ var blocks = {
             players["you"].speedY = data.speedY;
         } else if (data.type == "gameOver") { // player has won
             blocks.gameOver(false);
+            players["you"].score = data.score;
         }
     },
 
