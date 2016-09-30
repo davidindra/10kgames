@@ -9,7 +9,7 @@ var blocks = {
     speed: 4, // moving speed over canvas
     mySide: null, // left or right
     sp: false, // single player
-    maxScore: 1,
+    maxScore: 25,
 
     /**
      * Initialize canvas
