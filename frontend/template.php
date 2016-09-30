@@ -135,5 +135,6 @@
 <div id="game">
 </div>
 <?php } ?>
+<div id="mobile-alert">Mobil</div>
 </body>
 </html>

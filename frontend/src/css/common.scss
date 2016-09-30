@@ -15,3 +15,17 @@ a {
     color: #808080;
   }
 }
+
+#mobile-alert {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  #mobile-alert {
+    display: initial !important;
+  }
+
+  #game, #loading, #gameChoose, #login, #nojs {
+    display: none !important;
+  }
+}
