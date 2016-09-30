@@ -83,8 +83,8 @@ class ClientManager implements IClientManager{
                     Res::wss()->send($response, $sid);
                     break;
                 }
-                if($msg['gamename'] != 'blocks' && $msg['gamename'] != 'snake'){
-                    $response['error'] = 'unknown gamename - allowed are blocks and snake';
+                if($msg['gamename'] != 'blocks' /*&& $msg['gamename'] != 'snake'*/){
+                    $response['error'] = 'unknown gamename - allowed are just blocks';
                     $response['state'] = 'error';
                     Res::wss()->send($response, $sid);
                     break;
