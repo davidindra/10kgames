@@ -98,8 +98,8 @@ var blocks = {
             players["you"].speedX = data.speedX;
             players["you"].speedY = data.speedY;
         } else if (data.type == "gameOver") { // player has won
-            blocks.gameOver(false);
             players["you"].score = data.score;
+            blocks.gameOver(false);
         }
     },
 
