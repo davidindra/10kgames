@@ -92,6 +92,8 @@ var blocks = {
         if (data.type == "scored") { // player has scored
             players["you"].score = data.score;
             fruit.setPos(data.fruitX, data.fruitY);
+            if (data.score >= blocks.maxScore) // game over
+                blocks.gameOver(false);
         } else if (data.type == "directionChange") { // player has changed direction
             players["you"].x = data.x;
             players["you"].y = data.y;
