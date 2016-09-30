@@ -126,6 +126,9 @@ class ClientManager implements IClientManager{
                 }
 
                 break;
+            case 'logout':
+                $this->queue->stopGames($sid);
+                break;
             default:
                 $response['error'] = 'unknown command';
                 $response['state'] = 'error';
