@@ -72,7 +72,7 @@ class WebSocketServer
                 foreach ($changed as $changed_socket) { //loop through all connected sockets
                     while (socket_recv($changed_socket, $buf, 1024, 0) >= 1) { //check for any incoming data
                         if (($key = array_search($changed_socket, $this->clients)) !== false) { // get SID of this user
-                            echo 'DBG: ' . $this->fixJson($this->unmask($buf)) . PHP_EOL;
+                            //echo 'DBG: ' . $this->fixJson($this->unmask($buf)) . PHP_EOL;
                             $msg = $this->clientManager->message($key, json_decode($this->fixJson($this->unmask($buf)), true)); // process the message
                             if ($msg == false) { // client requested end of the session
                                 $this->clientManager->clientDied($key); // manage client's disconnection

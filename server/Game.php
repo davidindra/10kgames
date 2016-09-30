@@ -136,8 +136,6 @@ class Game{
                     $this->playerTwo->getSid()
                 );
             }
-        }elseif(@$msg['event'] == 'pos' && isset($msg['data'])) {
-
         }else{
             Res::wss()->send(
                 [
