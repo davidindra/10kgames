@@ -2,6 +2,10 @@ document.addEventListener("DOMContentLoaded", () => { // $(document).ready() => 
     id("login").show();
 });
 
+let css = `background-color: #ffe6e6;
+            color: #ff4500;
+            font-size: 1.2em;`;
+console.info("%c We would be very grateful if you don't cheat ;)", css);
 
 
 /**
