@@ -25,6 +25,7 @@ class GameManager{
         if($game = $this->findGame($sid)) {
             $processing = $game->processMessage($sid, $msg);
             if($processing == 2){
+                echo 'GAME END' . PHP_EOL;
                 $this->endGame($sid);
             }
             return $processing;
