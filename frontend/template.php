@@ -19,12 +19,15 @@
 </head>
 <body>
 <noscript>
+  <div class="vcen">
+    <div>
     <section id="nojs">
         <h1>10kGames</h1>
         <h4>online multiplayer gaming portal</h4>
         <span>Welcome on 10kGames! 10kGames is a new gaming portal created for 10kApart contest, where everybody can play a few minigames with others. Erm, <i>everybody</i>... with a JavaScript. We are so sorry, but if you do not have JS, it's really hard to make you able to play games in browser :( If you feel too much disappointed by this information, we can try to make you laugh with some dumb Chuck Norris joke:</span><br>
         <h4><?= $joke ?></h4>
-        <span>Feel better now? :) (If not, you can of course <a href="/">reload</a> for new joke.) We hope so. We can also offer you some best user statistics, if you want to know:</span><br><br>
+        <span>Feel better now? :) (If not, you can of course <a href="/">reload</a> for new joke.) We hope so.</span>
+        <!--
         <div id="score">
             <table>
                 <thead>
@@ -98,8 +101,10 @@
                 </tr>
                 </tbody>
             </table>
-        </div>
+        </div>-->
     </section>
+  </div>
+  </div>
 </noscript>
 <?php $ua = $_SERVER['HTTP_USER_AGENT']; if(strpos($ua, 'Lynx') === false && strpos($ua, 'Links') === false){ ?>
 <div id="login" class="vcen" data-display="table">

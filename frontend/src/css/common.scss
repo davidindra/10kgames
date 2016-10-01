@@ -40,3 +40,23 @@ h1 {
     display: none !important;
   }
 }
+
+.vcen { // vertical align: center
+  display: table;
+  height: 100%;
+  width: 100%;
+
+  >div {
+    display: table-cell;
+    height: 100%;
+    width: 100%;
+    vertical-align: middle;
+  }
+}
+
+body>div {
+  display: none;
+  &.vcen { // force vertically centered div to hide too
+    display: none;
+  }
+}
