@@ -67,14 +67,14 @@ class Player extends Component {
         if (fruit.x - blocks.speed > this.x)
             this.speedX = blocks.speed-1;
         else if (fruit.x + blocks.speed < this.x)
-            this.speedX = -blocks.speed-1;
+            this.speedX = -blocks.speed+1;
         else
             this.speedX = 0;
 
         if (fruit.y - blocks.speed > this.y)
             this.speedY = blocks.speed-1;
         else if (fruit.y + blocks.speed < this.y)
-            this.speedY = -blocks.speed-1;
+            this.speedY = -blocks.speed+1;
         else
             this.speedY = 0;
     }
