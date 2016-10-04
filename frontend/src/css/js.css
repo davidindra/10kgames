@@ -1,0 +1,83 @@
+canvas {
+  border: 3px dotted white;
+  background-color: black;
+  position: fixed;
+  top: calc((100vh - 400px) / 2);
+  left: calc((100vw - 800px) / 2); }
+
+.nameDiv, .scoreDiv {
+  position: fixed;
+  width: calc((100vw - 800px) / 2);
+  text-align: center; }
+
+.gray {
+  color: gray; }
+
+.scoreDiv {
+  font-size: 4em;
+  top: calc(50% - .5em); }
+  .scoreDiv.rightScore {
+    right: 0; }
+  .scoreDiv.leftScore {
+    left: 0; }
+
+.nameDiv {
+  font-size: 2em;
+  top: calc((100vh - 400px) / 2); }
+  .nameDiv.rightName {
+    right: 0; }
+  .nameDiv.leftName {
+    left: 0; }
+
+input {
+  background-color: black;
+  color: white;
+  border: 1px dashed white;
+  font-family: 'VT323', monospace;
+  font-size: .9em;
+  padding: .2em;
+  text-align: center; }
+
+button {
+  background-color: white;
+  color: black;
+  font-family: 'VT323', monospace;
+  border: 1px dashed black;
+  font-size: .9em;
+  padding: .2em;
+  margin: .5em; }
+
+#gameChoose h1, #game h1 {
+  padding-top: 1.25em; }
+
+#gameChoose table {
+  border: 1px dashed white;
+  border-collapse: collapse;
+  position: fixed;
+  top: calc((100vh - 400px) / 2);
+  left: calc((100vw - 300px) / 2); }
+  #gameChoose table td {
+    border: 1px dashed white;
+    width: 300px;
+    height: 200px;
+    cursor: pointer; }
+    #gameChoose table td.soon {
+      color: #979797;
+      cursor: default; }
+
+.vcen {
+  display: table;
+  height: 100%;
+  width: 100%; }
+  .vcen > div {
+    display: table-cell;
+    height: 100%;
+    width: 100%;
+    vertical-align: middle; }
+
+body > div {
+  display: none; }
+  body > div.vcen {
+    display: none; }
+
+/*# sourceMappingURL=js.css.map */

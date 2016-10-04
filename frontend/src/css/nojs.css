@@ -1,0 +1,31 @@
+noscript div {
+  display: initial !important; }
+
+section#nojs {
+  width: 60%;
+  margin: 60px 20% 0; }
+
+section#nojs div#score {
+  text-align: center; }
+
+#score table {
+  display: inline-block;
+  margin: 8px 15px;
+  border-collapse: collapse;
+  vertical-align: top; }
+
+#score td, #score th {
+  border-top: 1px solid white;
+  padding: 2px 6px 3px;
+  text-align: left; }
+
+#score .gamename th {
+  font-size: 1.1em;
+  border: none;
+  text-align: center; }
+
+#score .labels th {
+  color: #808080;
+  border-color: #808080; }
+
+/*# sourceMappingURL=nojs.css.map */
